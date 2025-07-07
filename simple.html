@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function display() {
+            let div=document.getElementById("display");
+            div.innerText="called";
+         
+        }
+        function data() {
+            console.log("called");
+            name=document.getElementById("id1").value;
+            email=document.getElementById("id2").value;
+            password=document.getElementById("id3").value;
+            console.log(name);
+            console.log(email);
+            console.log(password);
+            display();
+        }
+        function reset() {
+        console.log("reset called ");
+        display();
+        
+        }
+    </script>
+</head>
+<body>
+    <form method="get">
+        <input type="text" name="name" id="id1">
+        <br>
+        <input type="email" name="email" id="id2">
+        <br>
+        <input type="password" name="password" id="id3">
+        <br>
+        <button onclick="data()" type="submit">click</button>
+        <br>
+        <input type="reset" value="Reset" onclick="reset()">
+        <br">
+    </form>
+    <div>
+        <h1 id="display" ></h1>
+    </div>
+</body>
+</html>

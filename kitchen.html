@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenInfinity - Kitchen Themes</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Import Google Fonts - Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            padding-top: 64px; /* Add padding to body to prevent content from being hidden behind fixed navbar */
+        }
+
+        /* Custom color variables for consistency */
+        :root {
+            --green-theme: #38A169; /* Tailwind's green-600 for this page */
+            --green-theme-hover: #2F855A; /* Darker green for hover */
+            --red-theme: #e53e3e; /* Keeping red for inquiry button */
+            --red-theme-hover: #c53030;
+            --dark-green: #10B981; /* A darker green for specific elements */
+        }
+
+        /* Tailwind-like utility classes for custom colors */
+        .bg-green-theme { background-color: var(--green-theme); }
+        .text-green-theme { color: var(--green-theme); }
+        .border-green-theme { border-color: var(--green-theme); }
+        .hover-green-theme:hover { background-color: var(--green-theme-hover); }
+
+        .bg-red-theme { background-color: var(--red-theme); } /* Added for consistency */
+        .text-red-theme { color: var(--red-theme); } /* Added for consistency */
+        .border-red-theme { border-color: var(--red-theme); } /* Added for consistency */
+        .hover-red-theme:hover { background-color: var(--red-theme-hover); } /* Added for consistency */
+
+        .bg-dark-green { background-color: var(--dark-green); }
+        .text-dark-green { color: var(--dark-green); }
+
+        /* Footer link hover effect */
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Accordion styles */
+        .accordion-button {
+            cursor: pointer;
+            padding: 1rem;
+            width: 100%;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            transition: background-color 0.3s ease; /* Smooth transition for background */
+        }
+        .accordion-button.active {
+            background-color: #f0fdf4; /* Light green background when active */
+            border-bottom: 1px solid var(--green-theme); /* Green border when active */
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out, border 0.3s ease-out; /* Added padding to transition */
+            padding-top: 0; /* No top padding when closed */
+            padding-bottom: 0; /* No bottom padding when closed */
+            padding-left: 1rem;
+            padding-right: 1rem;
+            background-color: #f9f9f9;
+            border-left: 5px solid transparent; /* Default transparent border */
+            border-radius: 0 0 8px 8px; /* Rounded corners only at bottom */
+        }
+        .accordion-content.active {
+            padding-top: 2rem; /* Increased top padding when active */
+            padding-bottom: 2rem; /* Increased bottom padding when active */
+            min-height: 150px; /* Minimum height for active content */
+            border-left-color: var(--green-theme); /* Green border when active */
+        }
+        .rotate-icon {
+            transform: rotate(45deg); /* Rotates plus to an 'x' or minus-like symbol */
+            transition: transform 0.3s ease;
+        }
+
+        /* Custom styles for footer social icons */
+        .social-icon-circle {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent white for circles */
+            transition: background-color 0.3s ease;
+        }
+        .social-icon-circle:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Fixed navigation bar */
+        .fixed-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .fixed-navbar .nav-link {
+            color: #333;
+        }
+        .fixed-navbar .nav-link:hover {
+            color: var(--green-theme);
+        }
+
+        /* Inquiry Modal styles */
+        .modal-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .inquiry-form-modal {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-close-button:hover,
+        .modal-close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Custom Message Box Styles */
+        .message-box-overlay {
+            display: none;
+            position: fixed;
+            z-index: 101; /* Higher than inquiry modal */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .message-box-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Hero Section Specific Styles for Kitchen Themes Page */
+        .kitchen-hero {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background-image: url('https://www.greenply.com:5001/banner1705064139322-9636.jpg'); /* Background image from uploaded files */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        .kitchen-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4); /* Dark overlay */
+            z-index: 0;
+        }
+        .kitchen-hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 2rem;
+        }
+        .kitchen-hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .kitchen-hero-content p {
+            font-size: 1.5rem;
+        }
+        .breadcrumb {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+        .breadcrumb a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Kitchen Themes Grid */
+        .theme-card {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .theme-card:hover {
+            transform: translateY(-5px);
+        }
+        .theme-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .theme-card-content {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* Furniture Type Section */
+        .furniture-type-section {
+            background-color: var(--dark-green); /* Dark green background */
+            color: white;
+        }
+        .furniture-card {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255,255,255,0.1); /* Slightly transparent white for cards */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .furniture-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .furniture-carousel-container {
+            display: flex;
+            overflow-x: hidden;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            gap: 1.5rem;
+            padding-bottom: 1rem;
+        }
+        .furniture-carousel-item {
+            flex: 0 0 auto;
+            width: 300px; /* Fixed width for each card */
+            scroll-snap-align: start;
+        }
+        .furniture-carousel-nav-arrow {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            padding: 0.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+            z-index: 5;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .furniture-carousel-nav-arrow:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+        .furniture-carousel-nav-arrow.left {
+            left: 1rem;
+        }
+        .furniture-carousel-nav-arrow.right {
+            right: 1rem;
+        }
+
+        /* GreenSpaces Section */
+        .greenspaces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .greenspaces-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Floating Inquiry Button */
+        #open-inquiry-modal {
+            position: fixed;
+            right: 1.5rem; /* Equivalent to Tailwind's right-6 (24px) */
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 99999 !important; /* Extremely high z-index to ensure it's always on top */
+            background-color: var(--red-theme); /* Tailwind's red-600 */
+            color: white;
+            padding: 1rem; /* Equivalent to p-4 */
+            border-radius: 9999px; /* Full rounded */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        #open-inquiry-modal:hover {
+            background-color: var(--red-theme-hover); /* Darker red for hover */
+            transform: translateY(-2px) translateY(-50%); /* Apply hover transform while maintaining vertical center */
+        }
+        #open-inquiry-modal:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.5); /* Focus ring */
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between sticky top-0 z-50 rounded-b-lg">
+        <div style="height:100px; width: 150px;  display: flex;justify-content: center; align-items: center;">
+            <img src="./Green Infinity Logo Final-01.png" alt="GreenInfinity Logo" style="opacity: 2.5;">
+        </div>
+        <!-- Updated Navigation Structure: Single row -->
+        <nav id="navbar-menu" class="hidden md:flex flex-row md:items-center md:space-x-4 w-full md:w-auto">
+             <a href="./index.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Consumer</a>
+            <a href="./investers.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Investors</a>
+            <a href="./about.html" class="text-gray-600 hover:text-red-600 font-medium  transition duration-300 ease-in-out py-1 nav-item">About Us</a>
+            <a href="./Inspiration.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Inspiration</a>
+            <a href="./products.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Products</a>
+        </nav>
+    </header>
+
+    <!-- Floating Inquiry Button (Right-middle) -->
+    <button id="open-inquiry-modal">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
+        <span class="sr-only">Open Inquiry Form</span>
+    </button>
+
+    <!-- Inquiry Form Modal -->
+    <div id="inquiry-modal-overlay" class="modal-overlay">
+        <div class="inquiry-form-modal">
+            <button class="modal-close-button" id="close-inquiry-modal">&times;</button>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">Inquire Now</h3>
+            <form class="flex flex-wrap gap-4">
+                <input type="text" id="inquiry-name" placeholder="Enter Your Name" class="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out shadow-sm">
+                <input type="text" id="inquiry-mobile" placeholder="Enter Your Mobile Number" class="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out shadow-sm">
+                <!-- Added Pincode input field -->
+                <input type="text" id="inquiry-pincode" placeholder="Enter Pincode" class="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out shadow-sm">
+                <select id="inquiry-type" class="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out shadow-sm">
+                    <option value="">Select Inquiry Type</option>
+                    <option value="product">Product Inquiry</option>
+                    <option value="support">Support</option>
+                    <option value="other">Other</option>
+                </select>
+                <!-- Added "I'm not a robot" checkbox and Privacy Policy link -->
+                <div class="w-full flex items-center gap-2 mt-2">
+                    <input type="checkbox" id="robot-check" class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                    <label for="robot-check" class="text-sm text-gray-700">I'm not a robot</label>
+                    <a href="#" class="text-sm text-green-600 hover:underline ml-4">Privacy Policy</a>
+                </div>
+                <button type="button" id="submit-inquiry-button" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">Inquire Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div id="message-box-overlay" class="message-box-overlay">
+        <div class="message-box-content">
+            <p id="message-box-text" class="text-lg font-semibold text-gray-800 mb-4"></p>
+            <button id="message-box-close" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out">OK</button>
+        </div>
+    </div>
+
+    <!-- Hero Section for Kitchen Themes -->
+    <section class="kitchen-hero">
+        <div class="breadcrumb">
+            <a href="./index.html">Home</a> > <a href="#">Kitchen</a>
+        </div>
+        <div class="kitchen-hero-content">
+            <h1>Kitchen Themes</h1>
+            <p>Discover charming kitchen themes</p>
+        </div>
+    </section>
+
+    <!-- Introduction to Kitchen Themes -->
+    <section class="py-16 px-6 md:px-12 bg-white text-center">
+        <div class="max-w-4xl mx-auto">
+            <p class="text-lg text-gray-600 leading-relaxed">
+                The kitchen is your lifeline at home, and where all the magic happens. There's no place more soothing than a charming, cozy kitchen with a delicious aroma coming out of it.
+            </p>
+            <p class="text-lg text-gray-600 leading-relaxed mt-4">
+                Explore eclectic kitchen themes that make your kitchen stand out and make it the perfect environment to cook up some magic!
+            </p>
+        </div>
+    </section>
+
+    <!-- Kitchen Themes Grid -->
+    <section class="py-16 px-6 md:px-12 bg-gray-100">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="theme-card bg-white">
+                <img src="https://www.greenply.com:5001/banner1705064139322-9636.jpg" alt="Opulent Kitchen Theme">
+                <div class="theme-card-content">
+                    <h3 class="text-xl font-semibold text-gray-900">Opulent</h3>
+                </div>
+            </div>
+            <div class="theme-card bg-white">
+                <img src="https://www.greenply.com:5001/image1704534072905-9662.jpg" alt="Artistic Den Kitchen Theme">
+                <div class="theme-card-content">
+                    <h3 class="text-xl font-semibold text-gray-900">Artistic Den</h3>
+                </div>
+            </div>
+            <div class="theme-card bg-white">
+                <img src="https://www.greenply.com:5001/image1704533938339-2611.jpg" alt="Modern Minimalism Kitchen Theme">
+                <div class="theme-card-content">
+                    <h3 class="text-xl font-semibold text-gray-900">Modern Minimalism</h3>
+                </div>
+            </div>
+            <div class="theme-card bg-white">
+                <img src="https://www.greenply.com:5001/image1704534129298-6159.jpg" alt="Indian Ethos Kitchen Theme">
+                <div class="theme-card-content">
+                    <h3 class="text-xl font-semibold text-gray-900">Indian Ethos</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Explore Greenply Products Section -->
+    <section class="py-16 px-6 md:px-12 bg-white">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">Explore Greenply Products</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1710152637199-717.jpg" alt="Plywood & Blockboard" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">Plywood & Blockboard</h3>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1704350929535-122.jpg" alt="Doors" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">Doors</h3>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1710152649795-2364.jpg" alt="Veneers" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">Veneers</h3>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1704351029220-2769.jpg" alt="MDF and Board" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">MDF and Board</h3>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1710846165151-1495.jpg" alt="MDF and Board" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">PVC</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- #GreenSpaces Section -->
+    <section class="py-16 px-6 md:px-12 bg-gray-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">#GreenSpaces</h2>
+                <a href="#" class="text-green-600 hover:underline flex items-center font-semibold">
+                    Discover
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path></svg>
+                </a>
+            </div>
+            <div class="greenspaces-grid">
+                <div class="greenspaces-item">
+                    <img src="data:image/jpeg;base64,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" alt="Kitchen GreenSpace 1">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://www.realsimple.com/thmb/vX5iLDFcU2ebXER4yJv7XaTI6EQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-2161780422-2c0c043bcdf04315809453f6ffea281e.jpg" alt="Kitchen GreenSpace 2">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg" alt="Kitchen GreenSpace 3">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg" alt="Kitchen GreenSpace 4">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuNNajfXlR67y3ScxBTdEut5M8NbRTIwB1Kg&s" alt="Kitchen GreenSpace 5">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://media.istockphoto.com/id/1456467041/photo/beautiful-kitchen-in-new-farmhouse-style-luxury-home-with-island-pendant-lights-and-hardwood.jpg?s=612x612&w=0&k=20&c=wwlKjbAsf_xBveRuqMV2fCJ8cpED0CoXE4GdIUSxpW8=" alt="Kitchen GreenSpace 6">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-white py-12 relative">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-5 gap-8">
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Products</h3>
+                <ul class="space-y-2">
+                    <li><a href="./products.html" class="footer-link">Categories</a></li>
+                    <li><a href="./Speciality Plywood.html" class="footer-link">Plywood & Blockboard</a></li>
+                    <li><a href="./doors.html" class="footer-link">Doors</a></li>
+                    <li><a href="./Veneer.html" class="footer-link">Veneers</a></li>
+                    <li><a href="./MDF and Board.html" class="footer-link">MDF</a></li>
+                    <li><a href="./Speciality Plywood.html" class="footer-link">Speciality Plywood</a></li>
+                    <li><a href="./pvc.html" class="footer-link">PVC</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Speciality Feature</h3>
+                <ul class="space-y-2">
+                    <li><a href="./waterproof.html" class="footer-link">Water Proof</a></li>
+                    <li><a href="./Fire Retardant .html" class="footer-link">Fire Retardant</a></li>
+                    <li><a href="./zero-emission.html" class="footer-link">Zero Emission</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Brands</h3>
+                <ul class="space-y-2">
+                    <li><a href="./products.html" class="footer-link">GreenInfinity</a></li>
+                    <li><a href="./Ecotec.html" class="footer-link">Ecotec</a></li>
+                    <li><a href="./optim-g.html" class="footer-link">Optima G</a></li>
+                    <li><a href="./Greenply WPC PVC uPVC.html" class="footer-link">GreenInfinity Ndure</a></li>
+                    <li><a href="./woodcreest.html" class="footer-link">Wood Crrest</a></li>
+                    <li><a href="./greeninfinity-mdf.html" class="footer-link">GreenInfinity MDF</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Furniture Type</h3>
+                <ul class="space-y-2">
+                    <li><a href="./chair.html" class="footer-link">Chair</a></li>
+                    <li><a href="./Study table.html" class="footer-link">Study Table</a></li>
+                    <li><a href="./Sofa.html" class="footer-link">Sofa</a></li>
+                    <li><a href="./bed.html" class="footer-link">Bed</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Quick Links & More</h3>
+                <ul class="space-y-2">
+                    <li><a href="./about.html" class="footer-link">About Us</a></li>
+                    <li><a href="./contact.html" class="footer-link">Contact Us</a></li>
+                    <li><a href="./investers.html" class="footer-link">Investors</a></li>
+                    <li><a href="./Sustainable.html" class="footer-link">Sustainability</a></li>
+                    <li><a href="./blog.html" class="footer-link">Blogs</a></li>
+                    <!-- <li><a href="#" class="footer-link">FAQ</a></li> -->
+                    <li><a href="./Privacy Policy.html" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="./Disclaimer.html" class="footer-link">Disclaimer</a></li>
+                    <!-- <li><a href="#" class="footer-link">HKS Award</a></li> -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 mt-12 border-t border-gray-700 pt-8 flex flex-col items-center">
+            <p class="text-lg font-semibold mb-4">Follow us on</p>
+            <div class="flex space-x-4 text-2xl mb-8">
+                <a href="https://www.facebook.com/GreenplyPlywood/" class="social-icon-footer"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/greenplyplywood" class="social-icon-footer"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/greenplyplywood/" class="social-icon-footer"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/channel/UCl3ckO1adsIiPFHsb8Uizvg" class="social-icon-footer"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="text-center text-sm text-gray-400">Copyright © 2025 GreenInfinity.com. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const menuButton = document.getElementById('menu-button');
+            const navbarMenu = document.getElementById('navbar-menu');
+
+            if (menuButton && navbarMenu) {
+                menuButton.addEventListener('click', () => {
+                    navbarMenu.classList.toggle('hidden');
+                    navbarMenu.classList.toggle('flex-col');
+                    navbarMenu.classList.toggle('space-y-4');
+                    navbarMenu.classList.toggle('p-4');
+                    navbarMenu.classList.toggle('bg-white');
+                    navbarMenu.classList.toggle('w-full');
+                    navbarMenu.classList.toggle('items-center');
+                    navbarMenu.classList.toggle('md:flex-row'); /* Ensure it reverts to row on desktop */
+                });
+            }
+
+            // Inquiry Form (Floating Button and Modal) Logic
+            const inquiryModalOverlay = document.getElementById('inquiry-modal-overlay');
+            const openInquiryModalButton = document.getElementById('open-inquiry-modal');
+            const closeInquiryModalButton = document.getElementById('close-inquiry-modal');
+            const submitInquiryButton = document.getElementById('submit-inquiry-button');
+            const messageBoxOverlay = document.getElementById('message-box-overlay');
+            const messageBoxText = document.getElementById('message-box-text');
+            const messageBoxCloseButton = document.getElementById('message-box-close');
+
+            if (openInquiryModalButton) {
+                openInquiryModalButton.addEventListener('click', () => {
+                    inquiryModalOverlay.style.display = 'flex'; // Use flex to center content
+                });
+            }
+
+            if (closeInquiryModalButton) {
+                closeInquiryModalButton.addEventListener('click', () => {
+                    inquiryModalOverlay.style.display = 'none';
+                });
+            }
+
+            if (submitInquiryButton) {
+                submitInquiryButton.addEventListener('click', () => {
+                    const name = document.getElementById('inquiry-name').value;
+                    const mobile = document.getElementById('inquiry-mobile').value;
+                    const pincode = document.getElementById('inquiry-pincode').value;
+                    const inquiryType = document.getElementById('inquiry-type').value;
+                    const robotCheck = document.getElementById('robot-check').checked;
+
+                    if (!name || !mobile || !pincode || !inquiryType) {
+                        showMessageBox('Please fill in all required fields.');
+                        return;
+                    }
+                    if (!robotCheck) {
+                        showMessageBox('Please confirm you are not a robot.');
+                        return;
+                    }
+
+                    const message = `Hello GreenInfinity, I would like to inquire about your products.
+Name: ${name}
+Contact No.: ${mobile}
+Pincode: ${pincode}
+Inquiry Type: ${inquiryType}`;
+
+                    // Replace '91XXXXXXXXXX' with the actual WhatsApp number for inquiries
+                    const whatsappUrl = `https://wa.me/+91XXXXXXXXXX?text=${encodeURIComponent(message)}`;
+
+                    window.open(whatsappUrl, '_blank');
+                    inquiryModalOverlay.style.display = 'none'; // Close modal after submission
+                    showMessageBox('Your inquiry has been sent!');
+                });
+            }
+
+            function showMessageBox(message) {
+                messageBoxText.textContent = message;
+                messageBoxOverlay.style.display = 'flex';
+            }
+
+            if (messageBoxCloseButton) {
+                messageBoxCloseButton.addEventListener('click', () => {
+                    messageBoxOverlay.style.display = 'none';
+                });
+            }
+
+            // Close inquiry modal if user clicks outside of it
+            window.addEventListener('click', (event) => {
+                if (event.target == inquiryModalOverlay) {
+                    inquiryModalOverlay.style.display = 'none';
+                }
+                if (event.target == messageBoxOverlay) {
+                    messageBoxOverlay.style.display = 'none';
+                }
+            });
+
+            // Furniture Carousel Logic
+            const furnitureCarousel = document.getElementById('furniture-carousel');
+            const furniturePrevButton = document.getElementById('furniture-carousel-prev');
+            const furnitureNextButton = document.getElementById('furniture-carousel-next');
+
+            let furnitureCurrentIndex = 0;
+            const furnitureItems = furnitureCarousel.querySelectorAll('.furniture-carousel-item');
+            const furnitureTotalItems = furnitureItems.length;
+
+            function updateFurnitureCarousel() {
+                if (furnitureItems.length === 0) return;
+                const itemWidth = furnitureItems[0].offsetWidth + 24; // Item width + gap (1.5rem = 24px)
+                furnitureCarousel.style.transform = `translateX(-${furnitureCurrentIndex * itemWidth}px)`;
+            }
+
+            if (furniturePrevButton) {
+                furniturePrevButton.addEventListener('click', () => {
+                    furnitureCurrentIndex = (furnitureCurrentIndex > 0) ? furnitureCurrentIndex - 1 : furnitureTotalItems - 1;
+                    updateFurnitureCarousel();
+                });
+            }
+
+            if (furnitureNextButton) {
+                furnitureNextIndex = (furnitureCurrentIndex < furnitureTotalItems - 1) ? furnitureCurrentIndex + 1 : 0;
+                updateFurnitureCarousel();
+            }
+
+            // Initial update for furniture carousel
+            updateFurnitureCarousel();
+            window.addEventListener('resize', updateFurnitureCarousel); // Recalculate on resize
+        });
+    </script>
+</body>
+</html>

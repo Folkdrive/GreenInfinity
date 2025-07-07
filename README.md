@@ -1,2 +1,1 @@
-# GreenInfinity
-The GreenInfinity website
+# greeninfinity-ongoing

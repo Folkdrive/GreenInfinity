@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greenply |WPC|PVC|uPVC - GreenInfinity</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8; /* Light gray background */
+        }
+        /* Custom colors for consistency - using red for this page */
+        .bg-custom-red {
+            background-color: #DC2626; /* A strong red */
+        }
+        .text-custom-red {
+            color: #DC2626;
+        }
+        .border-custom-red {
+            border-color: #DC2626;
+        }
+        .bg-custom-red-dark {
+            background-color: #B91C1C; /* A darker red for accents */
+        }
+        .bg-custom-red-light {
+            background-color: #EF4444; /* A lighter red for highlights */
+        }
+        .text-custom-red-light {
+            color: #EF4444;
+        }
+        .icon-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+        .icon-box i {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #DC2626; /* Red icons */
+        }
+        .icon-box p {
+            font-size: 0.875rem;
+            color: #333;
+        }
+
+        /* Fixed Enquiry Button Styling */
+        .enquiry-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #DC2626; /* Red button */
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+        }
+        .enquiry-button:hover {
+            background-color: #B91C1C;
+        }
+
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Accordion Styling */
+        .accordion-header {
+            background-color: #f0f0f0; /* Light gray for FAQ headers */
+            color: #333;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        .accordion-header:hover {
+            background-color: #e0e0e0;
+        }
+        .accordion-content {
+            background-color: white;
+            max-height: 0;
+            padding: 0 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
+            border: 1px solid #e0e0e0;
+            border-top: none;
+            opacity: 0;
+            display: none;
+        }
+        .accordion-content.active {
+            max-height: 400px; /* Set max-height to 400px */
+            padding: 1rem 1.5rem;
+            opacity: 1;
+            overflow-y: auto; /* Add scroll if content exceeds 400px */
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-header.active .accordion-icon {
+            transform: rotate(45deg); /* Plus to X */
+        }
+
+        /* Product Carousel Styling */
+        .product-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 1rem; /* For scrollbar */
+        }
+        .product-card {
+            flex: 0 0 auto;
+            width: 280px; /* Fixed width for each card */
+            margin-right: 1.5rem; /* Space between cards */
+            scroll-snap-align: start;
+        }
+        .product-card:last-child {
+            margin-right: 0;
+        }
+        .scroll-button {
+            background-color: #DC2626; /* Red buttons */
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        .scroll-button:hover {
+            background-color: #B91C1C;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md py-4 px-6 flex items-center justify-between sticky top-0 z-50">
+        <div style="height:100px; width: 150px;  display: flex;justify-content: center; align-items: center;">
+            <img src="./Green Infinity Logo Final-01.png" alt="GreenInfinity Logo" style="opacity: 2.5;">
+        </div>
+        <div class="hidden md:flex space-x-8">
+             <a href="./index.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Consumer</a>
+            <a href="./investers.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Investors</a>
+            <a href="./about.html" class="text-gray-600 hover:text-red-600 font-medium  transition duration-300 ease-in-out py-1 nav-item">About Us</a>
+            <a href="./Inspiration.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Inspiration</a>
+            <a href="./products.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Products</a>
+        </div>
+        <!-- Mobile Menu Button (Hamburger) -->
+        <button id="mobile-menu-button" class="md:hidden text-gray-600 focus:outline-none">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg py-4 px-6 absolute w-full z-40">
+        <a href="#" class="block py-2 text-gray-600 hover:text-custom-red font-medium">Consumer</a>
+        <a href="#" class="block py-2 text-gray-600 hover:text-custom-red font-medium">Investors</a>
+        <a href="#" class="block py-2 text-gray-600 hover:text-custom-red font-medium">Products</a>
+        <a href="#" class="block py-2 text-gray-600 hover:text-custom-red font-medium">Visualizer</a>
+    </div>
+
+    <!-- Hero Section - Greenply |WPC|PVC|uPVC -->
+    <header class="relative bg-cover bg-center h-96 flex items-center justify-center text-white" style="background-image: url('https://www.greenply.com:5001/originalbanner1751612798171-3674.jpg');">
+        <div class="absolute inset-0 bg-black opacity-40"></div> <!-- Overlay for text readability -->
+        <div class="relative z-10 text-center">
+            <!-- Removed the GREEN NDURE Logo image as requested -->
+            <h1 class="text-5xl font-bold mb-2">PROMISE OF AESTHETICS & DURABILITY</h1>
+        </div>
+    </header>
+
+    <!-- Greenply |WPC|PVC|uPVC Content Section -->
+    <section class="container mx-auto px-4 py-12 flex flex-col md:flex-row items-center md:space-x-12">
+        <div class="md:w-1/2 mb-8 md:mb-0">
+            <img src="https://www.greenply.com/assets/images/green-brand/play.svg" alt="Greenply WPC PVC uPVC" class="rounded-lg shadow-lg w-full h-auto">
+        </div>
+        <div class="md:w-1/2">
+            <h2 class="text-3xl font-bold mb-4 text-custom-red">Greenply |WPC|PVC|uPVC</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Waterproof, fire retardant, and economical, Greenply |WPC|PVC|uPVC Boards promises to make your living space wholesome & appealing. Its ease of use & installation makes it a suitable choice for interior decor. Efficient and eco-friendly, it finds widespread application across sectors and also reduces the impact on the environment. What’s more, these boards are lead-free that makes it non-toxic, assuring the safety of everyone.
+            </p>
+            <div class="grid grid-cols-2 gap-4 mt-8">
+                <div class="icon-box">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDQwIDQwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiPgoJPHRpdGxlPmRlbnNpdHk8L3RpdGxlPgoJPGRlZnM+CgkJPGltYWdlICB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGlkPSJpbWcxIiBocmVmPSJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQUNnQUFBQW9DQU1BQUFDN0lFaGZBQUFBQVhOU1IwSUIyY2tzZndBQUFxOVFURlJGLy8vL0VXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUNDU2FvQUFBQU9WMFVrNVRBQUNuLzlXWERMRFMyWWdOdmM3YmV3L0cvTXZlZEVGRzllRHBOVS80NHlsWCtlYllIbUlJWFZneWE0TUx1NEgwaDR2cTVYNlI0dTlsZXFGMk1XNktsR2gvbzJTR3MxeXBPeHI5QVJUeUpRb21RejQ1T2tKSzhNeWt0NjBWdnY2aWxSYWRzbzdFZlMzbzdEYnIzZTNVSEU0MGIwVkhWaDliK3JTTW01eVNoZGNvOXBaalg1bVBzVk9DcnpjU0lCc2hiVlFSTDZyQ3VheTQ3c2ZJelhBL0Z5ZExXaXJ4bU9lQWFueXU4MDJnUkV6aHRUMHI1RksyQmhNT0NSa0NMR0VZejcvM2NzUFJ3UHQ0SXQ5bWQzblcwempLTXk0RHZLWnozSnBRY1duRnlhVUZIVm02d2U4WlVUUUFBQVFzU1VSQlZIaWNqWlRyWDFSVkZJWmR2R09JT0hKM0dCVHhERklNU0l3VGNodEFHaVNRUUFud2dseGtSSkNicEFRb21Eb0pocUVGQkFob2tvV2hSaUVtWVZSbUtxRVNGbWhHWVdWWmYwajd3czF2N2cvbjJiKzkzN1BXMnU5Wis4eWI5OHlEWm9jTlZDck1mODRXQyt5dzBINFIxSXZoNE9qazdPSUt0NmVFQzdHRVNPT3U5VmhLdE14enVkYUxhSVdpODE1SjVJTzV3dWZ4QW9jdjlCeCtXTW5oajFVY0FYT0VMd1pDWnlCYWJjUkxRVVJyakFoMkk1b2ZBdGRRdGhrMkt3eUhLU0lTVVdzUnJYZkF5MmJFNk5mQkZPditpbjROd29qaVpvVHhXTStlcXhLVVZ4a1NrY1RYTnNDRHd3Y2JrMmRxZkUxQkNrTXFrTWF3Q1dEbm9jM1lFc0UzdDJxZFRWUENkR3hMUjJ4aUJtemlrSjZabGIwOUF6a1dGODhkdWRqSmR2T1NFQ09GK1lnbjJsVlE2TUVDRklVVWwyd2dTa25hWGZvNkR4cE5lNUM1VjZhMlJ4a1Ard2JLT1Nxa1BkR281SWpTN2RzZlJWVEZoZFVLQ3N4RU9ZVks0UUdpTnd1VjRvTkU1bUtsK0JBVEpnT0hwK3d4STlKYThaYk5FZFJZYTNIVW5MRFA2b2UzNndLUFdVMWc3L2tiZlFMZklhcG5RaHhuYjV3QTNtVjREN0F3V0FGSGJnVXFHOUJJVFhpL21kZTRRUGpUNGlUUWVsTEFwVTJndlNPQm1VMm5qUEJqUXBWWWF6c3RrQmNnOEVHR1FFQ0ljejdEYVNQTzhOU2RiUDRoY0phaEVtQ2UwQzRnaytFak5GVGlESDBNeHk2ZSt1QzUyclFtdTAraWduMVRWMmlyYzBvcVVtdTcvYmVyanFWRmUxWVRuVGRlMkgrUjZGTnVUdzlDQUNLZ1l4ck9IRnVnWTFIUEFxVlQ5clFVZk5hVm9tNzd2S1M4cTlmYjNLTGExSFdwNzhCbGx5K3VOTzFPSjlyWi8yVUhzM1dBMThnYW1hNENYekVNQWw4emZJT0VieG1Xd3VzYXZpTU5ycWZ4R3IrWDE2VlY0TWFBd0trNGdkaWJ1TVV3bElRYUpyUVRhM1V1VXBFbDhJT3R3SEIzejJwdVZ0L3RJSjU2cy9TbFdYNFMxamwwWExwVWdmWFhjWWRpc1BFdVQzM29YS09tWmlUcW9pNWE4Mk4va0NFNFZOTm9OT1VzOWlrZlZkamR1VmRzVWxodmhYSjdicUpQK3FKOUNuM2lJckFjUC9FcW1QQ2t0dFBTM0JwUS8vT1lwVWhkMXo1KzM5SjV1R1ZvK0lGRjA1MUxkTFNrMXlPYzZBaXZrWmREMmJqS25yL3dZTHlURlJMUml1SlJRV05JOXVVMWJoVUhOTXZqUG95VnZmR3JRRDF3Z1h1V2ZYdUNDWDhUYTVlbG5lUFNUbFdWZ0ZOSndlOE0yaXd2WGlPYTVDZE5aYmdQUEdCWUlsM3lRYUlqenRNdDNzVk1PTm9UTk9uV24xL21FVFo1cCtEUlBaMXBNcWp3ajNWOUU1TUc1UkZSWk1nTytNbFRrNElSYVlpcnhNZzBqRXh3RFhaN3B1ejUwMXR2ZjNlYjA4Ty9ydGhiaHhibERTY1BScWdIMUZVTmcyUGFHMFNQbDR0cVJZMG4rRVFSdnBDMDUyOEVjdnlEM2llNE5DTWNGNU53ZVZuK2xkM3czMk41a2VEZVNETkNyVlNVQ3FqbFpmUnVGN0FiYnFCWklXSVk5d0lhaGs3d3Z4QXRrNzNVS0QvYXROQ0VLa01jSFB4Z2E4aEEyU2phRExrSU5lQUp4V0dDNWdxZmNmd1BxYm9IczJpTjBzY0FBQUFBU1VWT1JLNUNZSUk9Ii8+Cgk8L2RlZnM+Cgk8c3R5bGU+Cgk8L3N0eWxlPgoJPHVzZSBpZD0iQmFja2dyb3VuZCIgaHJlZj0iI2ltZzEiIHg9IjAiIHk9IjAiLz4KPC9zdmc+" alt="Icon" class="mb-2">
+                    <p>Super Density (0.65gm/cm3) for extra strength</p>
+                </div>
+                <div class="icon-box">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDc1IDc1IiB3aWR0aD0iNzUiIGhlaWdodD0iNzUiPgoJPHRpdGxlPmljb24tTGVhZEZyZWU8L3RpdGxlPgoJPGRlZnM+CgkJPGltYWdlICB3aWR0aD0iNzUiIGhlaWdodD0iNzUiIGlkPSJpbWcxIiBocmVmPSJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQUVzQUFBQkxDQU1BQUFBUGtJcllBQUFBQVhOU1IwSUIyY2tzZndBQUF1dFFURlJGRVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5NlFENmJ3QUFBUGwwVWs1VEFBOUNnYjdkK1AvOTQ4ZVRUUjBDUmFEaDhhOWVEQWRteS9uWHdyR3FxNjY4MGZEZmdtTGI2clY0UFNBSkJSc3paNm5hNzM4S05zWDZzbFVYUjVqdVdIWXhHbnJnRWd1b0tJVDgwaUxaVHJ2M1REQ3dHSU5aSWVkVEUyZzY5Z1RCa0VES25HQ0lEZFNYTW9uN0tnakkwOVZoT2MzVzRwSTNRNXRFanBad2tmVkdQbnQrU2ViY3BGYVVMZjVTNWJvOGFTU3RBOWhzT3pYZWlnRjN2UlowakhYSmVYSDBQeVBwVUVpaVgrdHF1VjNrdG1QT3Q0WER3Q2tuV3grQTBQS3pjaTl6ZkJHR1Q1cVZ0SmtzTkxqUHY4U2haWXRyRUJTc1FmTktEbTFhalllZUJ1aFVYT3hSR2FZdWJpdWpmUjZQVnhXbm5TWHRueWJHTEhOT0t3QUFCcDVKUkVGVWVKenRtSHRjaldjY3dKOFc1MWZKa2VpK2hTS1VVeWdVWlhVS1hSWkpxWTd1SVNzcFZDNGhuR3ltdWNZb3B1USswaXJFdExWaGNsc3hiSExaSkdGak43dit1ZC96bnZkOXp6bnZ1WFR5M3o3eis2UG45LzR1MytkNW4rYzV2K2Q1SStTVi9DL0U2RFhqYnQxRndJcUpxVmtQODU0dkJSTDNzdWdOR21MWnA2OVZWMG5XTnJac3RwMjl3K3R2T1BiclA4Q0pOVGdQN05yZ0Jya3dhWU9IREhWMUc2WXdTZHc5aG84WXlaZzl2VVlaVEJvOWhtWjQrNHdkSi9SSWZQM0dVMS8zTncxRStYdGp0TWd2UUx0WEdoaEVhUllURENCTmRLU2hrNEoxUnhpRmhHSkVtSjRJVnQ0S3g3aWd5ZnFEZ3FkZ1VNVFVUbENSemhnMUxhclRMcVBwaHB1dU55UW1GbU9NT3lXaFRJL0F5RGc5QVRKVERKaGhDSXFRK0FTTWRkWHBUa3hDdDQxaEtFSThMQUhHeCtqeUppTnFxS0VvUWxKd09WTjErSHdSbFdZNGlwQ1ptREJMcTJjMnpudDZZbGRZWkE3QzN0Ym15QURJbkdzSXdYb1lwMlhoRHBxbkpTTEdCQ0FFVy8vMDdIakc0Skdkblo2VGs1TStuK2tvUFR0N0FWVjhGK2JtRFE1S3pWL0V4Q3pHZ1kzVlpDMEI2QzNCTmczQW5ERXNaV3RNQWVvVDZRWllScTNMdVVxMmdnbnFBNUFyRnFMY0M5bnRVQUN3a3JHc0FoaXdXaTR2b01NcGdzSTE4QTZkVEJ1QWQxM1h2c2ZOK3JwaWdQZUZMQytBOVJJaEs1bnpGc0FHWTRDTkN0WW1iT0tRc1psNnRnRDBGNkJLY0JZRGlaQzFKU3JLWFlvOWlMZEN4bHpGZE5xd1c5QUhZQnR0TndJVWIxWm5mWUFWeTAyREZWcFlhQmN4bXBEdDlLZTNBMnhWV0tzQlNtbGJsZ3V3VTUwVkFyQ0xhTEFZU1NGa0lFUjhTUElCZ3BXczNRRGxUQmhXakRIcXJGU0FDazNXcnFXOWlsWWFFYklIN0d5VGNCWXFsU3cvZ0wxTW1BZFdNbmRWbEhRZmdBZlBTbUdVL1FCekZLWURtZXdRazNqVzdJTmNnalgyY1VpVmRSaFhjUmpQOGlWbEpXSTZybzhVcHVHb3hhMDljaFJFVXNxcXdvMTlqSjhUdXBLQnFxeHFnQkdzaXNYaTQ3RHdrU09sdUhDV1pyajNrMGtOd0FIMFRBS29wZHk2dE9OMnVMR2xiTUlKdms5eFQ5OGp5eXRQQXRRWEJXZFJ3eEwyZlU2ZFpwVjZkMHdzUWM4bnRNUnNVaGhGRm1lNGNkUmlDRzBER2o3OWpEL2ZJMHdiUDNjbFg1dzlKNWZMb3h2T3kwNFlveUxQT0x6NXk0SUxOTmhJWHJxYkJDZm5OMTBNcVhaVHZsTVJnRDAyRnBvWGhyQXEwa1ZaVkF3SHNibWt5UUxZZC9sS2wxanJ2TUdTTnRwWWVQcVhHM0lvY3pKWEJFNjBIYUlkQmtHZG5hTXFFaGtLbnJSZHBZTUZzRnVRSWRGWnZaR1J4eWdMZGNKQ0dQL3BSb2Q2TTBkeTlhdm1PaDg4REpPVFdxNWR1MEt1MTljN25PU3FReHp1T0ViNW1zOXRjUkhBbGxQL1lyZ3g4Mlkxa1lOdnlqRUlJTVZtMDZ1cWJzbkFzVzlWMVRjc0N5dnRFRWF4T3NxbGZ1dGhJb0RSc24vYm03bUROYlRpSDVObFJPUlBuODQ0M1ZGNXg0c0ErUXB0QlpkWm1GZ2hZSm5leGZQVW0vNTZpQmV5WnNNOVVzaThlVS9QK3lxc2VrV2xwYXZBcDM1SDFnaGczK090d2NTMjVtUWcyWnZwN3gvMlFFeHlRM1BYWjF1MVBXeTFmOWlOdlFQTFdoWEZtNG9EbnlxWkxHQ1p4QkRYME1zN285dkpUZWlYQ3JjSmliMzBhUDc5TmxsSDJxUGF4eEpGL21PQTJDeVcxYzZubGhMaDlNL0JkM3hDZytUN0NNbFBTQ1NpQ3NWOEZTbGY4U2xlSWptOUxZK2ZNZHFIbXF3aEFkNC8wS0J6eUFyR0c1S29Vc0ZTM2h1TjhLcmV6ai90NVZOL0pLWUMySVJuY0pYRzNBQXNPdkNjaExyOGxGR3czUW9jR2pMS0ZSZUpHUUJIbFY4UEUyTzV6RHd5VnNBYWV2N0J6elRtUWhvZXpqdTlpTnluc1dhS09jbjN1VlJ6YkRGMWlQRVk2cUd5cUdmNTFEdkVXWjNsUWpvUkxNaHdTdVc1amQ4THRpb3J3VWp4S1owVVJzUjQxMytxQVZkSUpLbFRoK20vS3BOWmVCNmZWamMxYzZuSHlXaDExam05cUt0QXQ3aTZ4UE81MjBtcEd1dTVQcFExN2tkVGlkQjZuY3ZkWVVUbXFiTHE5TEg2WWNCckd0WW5yVnp5TlhKWGRTMFRwRm9ZclB5Qy9tZ3Q5bC81N0JvUzFhRUNNOWVKd2pNV0dyVjZsdkhaTFNUTFhza3ExWVdpSHdON05DYUxrYklhNVJ5NWlUZndEODNhU2JKcDFQZWJqbjZzVy9qOHpNZmtIdjhRcVMwNG5vNTgzaTFkWXlZbEw1UnY5anM1MzU5VnQyaEdqcUpUQlNQYWRLSUljLy9seEhLUXJEMU1vZllTUkVscXQxS3psejRTU2txcWt0YTcyblg1QUtyRS9xRWFJdDJXUTQzaFJib1lTaG5VcktSMStGVTI3Y0JQVGlmK0VEL1Q3dmduOVVTY3NPNGNoWEtvaWE5blVHeWF6bXppdi9iLzdkcGVjVEVwZ3JGNk54bjAyY1RJcmR2R0wxcnMxdzlXMmJHUXdHdmRTenVwUTVwaUxSdTNxRHpiRHRRbC9QclVMdjg3aDVObmo3d20vZVBTNGVrNTN0bDJXa2J0Z3JLWEJiMlMvNGI4QzN1QXFMZit2REdsQUFBQUFFbEZUa1N1UW1DQyIvPgoJPC9kZWZzPgoJPHN0eWxlPgoJPC9zdHlsZT4KCTx1c2UgaWQ9IkJhY2tncm91bmQiIGhyZWY9IiNpbWcxIiB4PSIwIiB5PSIwIi8+Cjwvc3ZnPg==" alt="Icon" class="mb-2">
+                    <p>Lead-free PVC boards for a healthier environment</p>
+                </div>
+                <div class="icon-box">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDc1IDc1IiB3aWR0aD0iNzUiIGhlaWdodD0iNzUiPgoJPHRpdGxlPmZpcmU8L3RpdGxlPgoJPGRlZnM+CgkJPGltYWdlICB3aWR0aD0iNzUiIGhlaWdodD0iNzUiIGlkPSJpbWcxIiBocmVmPSJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQUVzQUFBQkxDQU1BQUFBUGtJcllBQUFBQVhOU1IwSUIyY2tzZndBQUFyVlFURlJGRVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5Zk9uVjN3QUFBT2QwVWs1VEFIMlBDaEhDLzR3cTZhdzArNm82K3I4bTUxYng0eGJ3OXhqMElOMHVzWG1sUkY3R1hYTWJEcSsxb2Jqc094TkdOOUNyNHFnNU1WZ0wzMzZPVGZ3SGFrWEZoc1B5RFJjWjlucDN3WTB5QVIvTTZBSTQ1S044bTFWUUt4MmZacVlKYk5mcmY5a3BTR2hpQ084UzB5aWdHdjdtRVAxVTFyYzk3UVFzV1JSa3hGT0xkTmhjc05MekEyK2MrRE9XY3R5SFBrL1JKR1Boa2RTRW5YYklMMkc1REhYbGFZSnRYeTNlUTd0TDZwNktzNW1KbDFLaWE1U0FoUVpsZ1pCdWtpSTFQNlRIelRZUFVZTzZ5dURMdHExN3pqeE1ZRnFUVjBKd3ZyemFCVENWdEloQlcwbkoxZmxBTVoxSStnQUFCUEpKUkVGVWVKekZtUGxmVlVVWWgwZUJyMWdVZEMwMlV5SGNXdEJDS25QRGpFREZyb3BXNWxhaEtZTG9WVXNDSXdRdEZDbHZCSm1rUVpwWm1wbVpTRXFtaHBsbG0yVUxaV1hiMzlFNzU5eHp6eHpPek4zNzlQNXk1bDNtdVhQbXpMenp6bVhzZjVKZXZhTWlSSXFPQWZwRUJoWGJGOEFWRVVGZEdVY29YQlVKMU5XY0ZJK0VDS0N1SVpLajM3VzRMbnhVWWhLUW5NSlNnZjVoczY2bllRMWdiQ0F3S0Z4VUdxSFM2WGtEa0JFbWFqQ2hodkRHVUlUN2tzT0lNRnh2M2dqY0ZCYnJadUFXVHpNVGlCc1JCbW9rRGV0V1E3a055QXFETlFySTlpcTNFL2lPa0ZGM1V1L1Jwa296ZGxmSUxBY3dSbEFUQ1QwMlJOUTRZUHdFMFpCRHNJbWhzZTRHSmxrdDl3QzU5NGFDeXFOUjVGdE5veWNqdEhReFJkSnZJdkduaHNBcUFBYmJqTk1JZGwvUUtHY3VNTjF1bmdITUxBeVdOUXVZTFRIblViNitQMWpXQThDRE12c2Nlc3VIQWdITXpabG5OT2NEQzZReEN5blBQdXdmOVFqd3FORk9BRVpLZ3dxTEFubkxSUkFTM21MZ01YbllFakY3S0dRcFI2RllWNWFWSUw1VUVUZ2NXTzRiVmFhaHNFTFhWcnF3eXFtSVhMMEdlTnduNndsZ2JUbndaSVdtVlFwVFo1TkpkR0w2UXEyak1UM0ZWZ0ZWbXBvT1BLMk1kWllBMVQ1WWxLeldNMVlEMUdycUJtQ2pPcGdHOW96YVN4L24yVHJHU21sWmIrSTZMWS9ONnVoaDljQVdwWmUrVFFOL1BnZDlMZFQ0enFHMFlIdXJmQ01JVWFhMW5nZFM1ekkyQ05qcWcrVUdTdW9VdmhlQVJyMzFJbEZkVmF6SmxsU3QwZ3hrS2x4YmdaYzh6WEsreXJiUmFmaXlMOVoyb0VYaGVnWG9aN1IzTE5aWHJjOENkU2Z3cXR6VEdvZng1bzV4dHIzR1dUbStXUGt1SkMrVGVtS0JabEd2Y08vYS9YcUZvZTE1UTlKbEx4QXJaYjBKRktoR2tFaWJLOXB1Zmd2WUo0MWZweTZUaCs2bjE2MjAyMWNBVGRJT2xHN2VscU9jc3lGUHlnZFVSZWR1NVRKK1IvdWtCKzJPcWNDNzBoNkhWS3ZwUFFJZEJ2YmJQZThEUjZSZDZLQm9senFTK0pnY3N0Y3BWazNMUWVDb3pFN3pPTG1EZlVDN2FuVlAxd0pndTVSMUREZ3VzMU54MzhtMCt0QldXbEJDK1ZESzJnT2tTY3duYUVBZDlQeUlabTFwRHgvdDRGNVMxa2tnUm1LbXhETlFhNHdsV0lyVmQwcFd1bkRwRHhSWkxmbW5hOHRZRnJCVFY1dHQ2Zjlqd0MxbEZkS1owU1VhemhUeEhKMEJuTlQxQVRTd1Q4U0ExbnArMUVpbEFUZ3I2cDlTMzFIc25IbDJId0UrRXdNMnFNOHAycENmQzZwMi9ZVDd2RmxsUnJtc2V6bExYU0JHdXl3cDVBdU5OZE9CNURPR3FROXczZ3lJU2xhbEhLWjlsalJUbzltcUx1SzQzRmJEUkNrdXlRejRFdmhLaFdKZFZNd25DdjFLdERvWE1Dc3R5ajFmaXo4MlI4bGlwNFc3VDdHMnJyN1phOG5wbExEYWpQWVk2WGIzeWl5aHFtb0JEdkJuNWhJaG9FVXJFalJKY2FrV3FrYzJtc1Z1dXl4dFZKbWJPY05mQVZZSzcvUWZrKzIxQzhCODcwOUJkcHdJOGkyRlRORmFiY0IzTnZjbUk1ZGNoQ3JiQ2JMWk9CUy9OeW9uVWJLQkgvaHpIMFg5NkEvRjJFOFVWa1BQd2xSZ1hnOWZSenh3Z3VrWDFPNmYvYlA0RFVVcm5kYWEzOHlRWXIzb3BDc0Ura3FPUzd2VVVWV1BHYit3TGZiN1hoSmZCdFA1eUx2ekFrRXhyVWpqWTdwRXBZN0YvaXZmamtNbzBTQWg4RC9vT2ptc3RvR0dVU0RVSHJSZDZ3OW5jTmR2QVpOSWRzVHdMbXQ0QWpPT2EzZWp4NEp0dndlRElybmNEWThzUHo2dS9JK2pmeHFxb3pOSUVwZUwzdTZDL0xWcmd2K2VNcWxzUC9lM3dIRTFUdXZ5MzBrdGVmOWNXSFRwVlBiQ1EyZWIwbnV1M1A5Uy9nV05CK3djMlEzbmJBQUFBQUJKUlU1RXJrSmdnZz09Ii8+Cgk8L2RlZnM+Cgk8c3R5bGU+Cgk8L3N0eWxlPgoJPHVzZSBpZD0iQmFja2dyb3VuZCIgaHJlZj0iI2ltZzEiIHg9IjAiIHk9IjAiLz4KPC9zdmc+" alt="Icon" class="mb-2">
+                    <p>Limited spread of fire and produces less smoke</p>
+                </div>
+                <div class="icon-box">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDc1IDc1IiB3aWR0aD0iNzUiIGhlaWdodD0iNzUiPgoJPHRpdGxlPm5vLXZpcnVzPC90aXRsZT4KCTxkZWZzPgoJCTxpbWFnZSAgd2lkdGg9Ijc1IiBoZWlnaHQ9Ijc1IiBpZD0iaW1nMSIgaHJlZj0iZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFFc0FBQUJMQ0FNQUFBQVBrSXJZQUFBQUFYTlNSMElCMmNrc2Z3QUFBdmRRVEZSRkVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXlFV0F5RVdBeUVXQXltSDEvS3dBQUFQMTBVazVUQUNaSWFJS1p0OHJPeTd1Y2hXeE1MQXRjbVAvVm9CWUJzZTN1Mk1HeXFLYXB3TlRyOTFrS0VIemZqMUFvQ0NSSGhNZjY2WTBjQW5iR2Z5TVhjTHlLRDlwRk9KTDI2RzBUcTZNcUdzazdLL2xlZFI1WWZWK1VOUlhYYXlLbGVnVTlpK0EvbnNQUHpCMyswNzBubC95V0RQRjd1VVl2VWFIczVFMU90ZlNEYm9hdzJ4bGdEZkxtOEJ0UElMWXBaVEZUV2lXTXYxME9QTnh6MEZRSnpUSzBVZ2ZpSDI4WUlSUXVXemFuRXFRRStLN3YxdVhFWVZaMGVYNml1ck5DNnBNRE92dVYwZlYzblFaSmdKQlg0ZWViam5FUnhlTTVSRXR5WjJwS1ZZaXQvV080cW1TYXIybUprYjR3TTlMZHduaGk4MEhaaDJaQTNpMDNOS3lmUTBoSWtpc0FBQWsvU1VSQlZIaWN2Vmg1WE5WVkZyOElpZ2phMHkraWlDZ29KcGk0WVNpU01LYTRpN2xRT0dGb3VPRHl4QVYzRkRSOUdKYmE0bEtZS1FHWkswc3FodWFRcHVhNG9vMWJZbXJOTkpaYWFhTXp6Ujl6enIyLzMrLzkzaE5RNXpPZk9YKzhlKzQ5NTU3ZnVlZWU3VDRoL20vZ1VzUFZyV1l0OTlvZWRUeTk2dFo3NnIrV1k2bmZ3QU9PNE4zUTFlZkpCVFdxMTloWGJtL2kxOVMvV2ZPQXhvRXRXc3A1VUoxV1R6K1JwTmJCSWJ5dmRwdG4ybHFNeGRCMjdUdDA3RVRMWVoyZmZXeEo0VjJhMEk2dUVkMHFvVVUrMTUxb25hS2lIMDlVcXo4UWQ4TWVWZEtmNzlrTGlPbjlHSkw2OUNWSi9mcFh5ek9nSi9FMGJmc29VVDNDZ0lHREh2bkYyRHJBNEJlcTV3bW1EdzVSNkZCOXJhYTczWERod3p5SEszM2k2S0ExcXhQMUloRHlra0xySTBBaDhVQ2NUaDg2Z3EvM2p4Si9tWnl2Y2RXaUVvQmErZ1dOQkY0UkxvazluaCtGMFFaREN6SlREUENxbWlVQlkwS3JFQlVBSk5sbm5lQXhWbm43dVBIYVVnOGt4NG5vQ1ppb3piMEFqeW9QMk5DWVRKcHNOY1hPbEJTNUdJeXA5RHNjRXhSUEgzYTFXcFdKbXFacnhmdEdFZGZnNlYxbXBMWkxuVGxyTmpESGhTbHpZWjBud3QzUlZQSU5iUWtyT2RDc2gwVU5BZ0lsTXQvWEpiUXJrTmJCQ0pTVUJlU2JDL3VsTnhKemdJeEZ3RnhlWFV5VDlteXoxNXhGTFZrS200clpOR1JTTUNZdE0xTmZseWNORmFrMkhpTjRLWXRFRGFPUmJ0UEZTZFp5NEEyRkRmVWo5amNaVzdHU2Z4dXRla3VJdDRGMzNxWEo2cnBUMHRkSVVaUkZKSGwxRU5ZNmlwb0hyTlB4OTREM3BSQ3Bmdlo2V0ZQRkI4QVNNLzlpQ285VkNwMExkREdUR3RuZ3JlTWJnQS9Ga28yME9IMFRCVk1PYWZrUmVRTnlUZng1TFRXdDFJYmtmQk50Q1BDeGhtNEdnc1dNVE5zbjJqeDhDOWJtaXpFWVlkYktsNytudzFaZ201MjJmUWQyYW1oMkFRcUZLQUtLRFdxcUVKUVhQcld6UjVMWmQ1bEVkd0RHRzVOcFNCN0FKOTI5Sjd0RVhzdGV3TXZPKyt4blFLbDltbVhUUlZrbUoreGpWVnBpaTBITlJETWVYZ1gyVytISkI1djJrVUhzOWpsWjdITzdxUGdZL1lBSDNJbkN0cUJZeXRhb000QS84Ymdzb3d3b2N5dzBLNzZRcnJYUVdNalpCTFRTdnNLVW5xeTQxV0JZam9NNjQxVEhrSWpkUXR5SHZqek1mcXFBelQ1VHc2TlpsdlI2Znl4U1MwZDJZSTlHM1ZxR295WlJYeEZ2UVFTWmNzT3hjTFVTU2JmeVo0TmVJeXpvQzRsUVhLZ01TVjR3UUNONllZN2ExT1g0TlA0YS9PSWNDazdXQ2NjYkRPMmpJVk94UUk0bjRhZlRQUFFqYm9DL2FFTmFEVFJMRWo0bnpINWxCbjlNbCtNRW5OS1hZdUFxVG5kdUo4U1oxN1ovQXBRRERVd2JjczRhWmhmUFJEa0UvNmZvMVpxR1BLQ0d2blFJc2Z1QXMvS2NZWlNiNS9xZnMvUG5tc3d1YkJobGx2VVU4RFVOZjlHVGhtVkJjVExlMkVVblkxbm5nWE5tYnBIcllQYXg2R0FtV29Kd2dZYUxXS291L0JKZjhhcnRHZDZYYUJLZlRCWXpRdzY1NkdWeXBaZmxyTkVFZEZicnNkdmw0STF2Nk5kTkQ5dlduczE5amRBcHgxcUxXWlJtOWtoNWxxTlhLQ0xMUm54REdlK1lsbzNyeUZzN3FjMFlybUNNUWlqM05YZlFTak83VHdWd3RibFJVeFpHNkRWeUcrYlQ3N2VtaWpsUDVRUExpOHhvcW05Wmh0bTdGVEhKZmVUTUdadmJaREthb1RpOHBCYnVLckFWVUdHWWVQamFmaUJnTDJZYnE1Rytkck92b2YzWE5md0c5TmdScHpGT2NFbzJuY1pubkZMK2JmSWdJeWRsS2JNcitBNFZLazFtWDhpbHpOVnJubHIrSG1QcGQ1emVPQ2hZVlk2Z3Z6cTBRd1BNV1pROCtLckNocU9KRU1Yd1ZVSFhHK3NGMzBDR2VTZTVzTlZoenVGczVIYTZLYjI3MkxmMmI1U1N0SFFsSWxBdXVNUDR3V0h2MzhzNm1xZWNSZTB1U3Y1T1FYL1RudU4reERFNUpzbG13RXR2RDNSWXZOMDA4ZkcxYXpYUGU5RlBYTy9PWStra25aNkVpa1dMYnNXVE55VFFiQ0dhdk1LckY3cFRrWGVHWlp1TU9paEVaM2t0YzBWVG9KNitWbE91OWFjYnBPdmlQTVp4Y1pHV0FweEZPWmhkV0Z4dmp5ekRIWkZ6clFOOWRWMHc1L2dNZU4rK2ZVbHMvQmwxYWRZVytJV0dYMW0rL2dyUVRwbnJZSFlKWGZXU1EwcVNweDhwVUUwakNlRW9Kdi9rbkhpWFJIa2NVSHkzYkhrOHNObUhPV2xhRjRpVUNPVzJNQ0YyQTdJZDJnV3J2STlaMHMzRTNoTS9hTmR6UlBtUXoreUh0S0o2a1l6UEpES3BNQ1JSWkZseFJjNFN0RUMrQnl2blJLRXBKZXAxcElyUjhmVFI0eWF6MjJFbFpBV1Y0R0tEVFdHenBlbXA2Nm1BK1JIeG5MMjFyQ3kzdTlGNjRXWE9SL0hVU1dLL2JMdC9BN1QyK3hhNjJua3RWSHpxdm4rWit1Q0hEMGk2VXpMNkI1Rm1MKzhieUpMbzRjUkZjQnVLN0dyZjE1bFhOSU12MzNWM052dUQ2YnRUNWg4K1lKSkZIVlRwZ2NSQVRlK2FxNWNWd0pleTZDR1U2Qnc3akJmRVRYN29rTmxWZjVWT2R3V1k5ZHA0UTdaSEwxMlBRZUF1VGlSdE4xQ0tYQWRzMVRsT29kZHF6WnFVUC8zRUdjM2I0elA0TFR1SU1zRnZyaW1PaCsySTgvWkppSGEzRE5RWTNORHhxeGo4NGErRzJlL3c0M1pUMUV5cnMvRkdteDVERkRLbWwvZ3B6ZVVZWXRnUzNMQkdzOTc1YmpabEc2Zk9ld00yNitpQm4wMXFVVjlRQUNQUjhFMnp0eWRtcG4wdFRkUSt2WkNXZWsxeGtKVnRaQXB1OGNlYlNWZU42cDd6bytZTUpkRDhqK0NmZDBtNzcxWmVsb25rMGhiL0xxYW1tbHJzem80NmowVkZQSThxaS9yUThmcnNMSlh0Y2R3OXFYbERQaWpINzJSR2JQWnVvZ2dGR3gxbGpZZE1pVm15RGs1QzV1czZZVEd3UWlKemtEeUdEdllDdmVyL1JjeGFRMGExQkE4OWc2bVBTQkJMVkRoVHB3SFBlTFgrZEsxQXFWNW9KdXJ6Nk1lcFpyUFJiRkN4SGU0c2lxc0M3cFpyNFp5NkhsZ2ExYzVFdFRSVkxRdTFRdHpNNlMxZEhKeXFoUWFscEUyUlZ1NzJTVDhvMzNOT0p2LzhCd3VvblZBSndBUHVaL2pSSzk4V2RPRENoeE03dzBDZ3I0YW00cWRUL0ljSE9oV05HTEVwaUxFdkZhVUdrRWtWcExzbTZ1eVpTa1dKamNYMnAvMzlmTkg2ZXIvUlJ2bzUrSUhPdFp1bll6am15R3RDeGxjdVNzaDNWYm01ZDZRK0x6MDRZaDNWOHZuMnhkaDFKWHpMUitoTis5NVdad2ttK0IyWWFtcVVKeUZOanZFbmYzSG1US1NEVGc5M1huV0FOK2tBMS9LTWFWNWs1V3pSRGZUM2JYV1FTcDFPaFZ0SzlVeTlxYXM2UHVOUm9naHVEd1pPTEhpclNyclBFSTcxcU1mN1J5M0xrNjhxWUZlbC80bTBUMG9qNHM3N2xkRXFoZjZ6ZHRDR01QODdOODFQR0V0c3F3VHBKWTBmUExZa2h0elQ2NlZmTFcxUkp5SDk5TVhlWHpYODlxQjBYaFNXNUQxNnV6TjhYTEk4RFk1UU1mSHVtaWNYcEdEcnYrK2wvMTU2YTF6dDljWHorMFY5WDJQWm83ZjhqK0EvcFk5N00zNU1ic0lBQUFBQVNVVk9SSzVDWUlJPSIvPgoJPC9kZWZzPgoJPHN0eWxlPgoJPC9zdHlsZT4KCTx1c2UgaWQ9IkJhY2tncm91bmQiIGhyZWY9IiNpbWcxIiB4PSIwIiB5PSIwIi8+Cjwvc3ZnPg==" alt="Icon" class="mb-2">
+                    <p>Inhibits growth of harmful bacteria & development of fungi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Greenply PVC/WPC Boards & PVC Doors Categories -->
+    <section class="container mx-auto px-4 py-12 text-center">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://www.greenply.com:5001/originalthumbnail1751612900844-832.jpg" alt="Greenply - PVC/WPC Boards" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <p class="font-semibold text-lg text-gray-800">Greenply - PVC/WPC Boards</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://www.greenply.com:5001/originalthumbnail1751612934765-6549.jpg" alt="Greenply - PVC Doors" class="w-full h-64 object-cover">
+                <div class="p-4">
+                    <p class="font-semibold text-lg text-gray-800">Greenply - PVC Doors</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Products Section (Carousel-like) -->
+    <section class="container mx-auto px-4 py-12 text-center">
+        <h2 class="text-3xl font-bold mb-8">Explore products</h2>
+        <div class="relative flex items-center justify-center">
+            <button id="scroll-left" class="scroll-button absolute left-0 z-10 -ml-5">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div id="product-carousel" class="product-carousel flex-grow">
+                <div class="product-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                    <img src="https://placehold.co/280x200/DC2626/FFFFFF?text=Greenply+Premium+Plus+PVC+Boards" alt="Greenply Premium Plus PVC Boards" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <p class="font-semibold text-lg text-gray-800 mb-4">Greenply Premium Plus PVC Boards</p>
+                        <button class="bg-custom-red text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-custom-red-dark transition duration-300">View Product</button>
+                    </div>
+                </div>
+                <div class="product-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                    <img src="https://placehold.co/280x200/DC2626/FFFFFF?text=Greenply+Premium+PVC+Boards" alt="Greenply Premium PVC Boards" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <p class="font-semibold text-lg text-gray-800 mb-4">Greenply Premium PVC Boards</p>
+                        <button class="bg-custom-red text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-custom-red-dark transition duration-300">View Product</button>
+                    </div>
+                </div>
+                <div class="product-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                    <img src="https://placehold.co/280x200/DC2626/FFFFFF?text=Greenply+Commandoo+uPVC+Doors" alt="Greenply Commandoo uPVC Doors" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <p class="font-semibold text-lg text-gray-800 mb-4">Greenply Commandoo uPVC Doors</p>
+                        <button class="bg-custom-red text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-custom-red-dark transition duration-300">View Product</button>
+                    </div>
+                </div>
+                <!-- New Product Card Added Below -->
+                <div class="product-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+                    <img src="https://placehold.co/280x200/DC2626/FFFFFF?text=Greenply+Maribbele+PVC+Boards" alt="Greenply Maribbele PVC Boards" class="w-full h-40 object-cover">
+                    <div class="p-4">
+                        <p class="font-semibold text-lg text-gray-800 mb-4">Greenply Maribbele PVC Boards</p>
+                        <button class="bg-custom-red text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-custom-red-dark transition duration-300">View Product</button>
+                    </div>
+                </div>
+            </div>
+            <button id="scroll-right" class="scroll-button absolute right-0 z-10 -ml-5">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        <button class="mt-8 bg-custom-red text-white font-semibold py-3 px-8 rounded-md shadow-lg hover:bg-custom-red-dark transition duration-300">View All</button>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="container mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold mb-4 text-custom-red">Frequently Asked Questions</h2>
+        <p class="text-gray-600 mb-8">Need Answers? We got them</p>
+
+        <div class="flex flex-col md:flex-row md:space-x-8">
+            <div class="md:w-1/3 mb-8 md:mb-0 flex justify-center items-start">
+                <img src="https://placehold.co/300x200/DC2626/FFFFFF?text=Engineer" alt="Engineer" class="rounded-lg shadow-md w-full max-w-xs">
+            </div>
+            <div class="md:w-2/3">
+                <div class="mb-4">
+                    <button class="bg-custom-red text-white font-semibold py-2 px-6 rounded-full">General</button>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" data-target="faq-pvc-1">
+                        What are the benefits of a PVC board?
+                        <i class="fas fa-plus accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content" id="faq-pvc-1">
+                        <p>
+                            They can be used for structural purposes and as a decorative finishing material for surfaces. They have a smooth finished surface. The PVC board is homogenous &amp; the density is equal at all points of the board.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" data-target="faq-pvc-2">
+                        Can we use PVC boards in kitchen?
+                        <i class="fas fa-plus accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content" id="faq-pvc-2">
+                        <p>
+                            PVC boards are ideal for kitchen. As PVC foam boards are fire-resistant. It can resist acid, moth, heat, vibrations, noise and are light-weight.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" data-target="faq-pvc-3">
+                        Are PVC boards durable?
+                        <i class="fas fa-plus accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content" id="faq-pvc-3">
+                        <p>
+                            Due to the structure of its component molecules, PVC foam boards are highly strong which ensures that they don’t undergo any deformation.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" data-target="faq-pvc-4">
+                        Is PVC suitable for outdoor applications?
+                        <i class="fas fa-plus accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content" id="faq-pvc-4">
+                        <p>
+                            Yes, PVC is durable and weather-resistant, making it an excellent choice for outdoor use.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" data-target="faq-pvc-5">
+                        How does PVC compare to traditional wood products?
+                        <i class="fas fa-plus accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content" id="faq-pvc-5">
+                        <p>
+                            PVC is low-maintenance, and resistant to moisture and pests, offering advantages over traditional wood.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" data-target="faq-pvc-6">
+                        How can PVC be painted to match different colour schemes?
+                        <i class="fas fa-plus accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content" id="faq-pvc-6">
+                        <p>
+                            Yes, PVC can be painted with compatible paints to achieve the desired colour or finish.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fixed Enquiry Button -->
+    <div id="enquiry-button" class="enquiry-button">
+        <i class="fas fa-info"></i>
+    </div>
+
+    <!-- Enquiry Form Modal (Copied from previous page) -->
+    <div id="enquiry-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-button" class="modal-close">&times;</button>
+            <h3 class="text-2xl font-bold text-center mb-6">Inquire Now</h3>
+            <form id="enquiry-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="name" placeholder="Enter Your Name" class="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-red">
+                <input type="tel" id="mobile" placeholder="Enter Your Mobile Number" class="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-red">
+                <input type="text" id="pincode" placeholder="Enter Pincode" class="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+                <select id="inquiry-type" class="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-red">
+                    <option value="">Select Inquiry Type</option>
+                    <option value="Product Inquiry">Product Inquiry</option>
+                    <option value="Service Inquiry">Service Inquiry</option>
+                    <option value="General Inquiry">General Inquiry</option>
+                </select>
+                <div class="md:col-span-2 flex items-center mt-2">
+                    <input type="checkbox" id="robot-checkbox" class="mr-2 rounded text-custom-red focus:ring-custom-red">
+                    <label for="robot-checkbox" class="text-gray-600 text-sm">I'm not a robot</label>
+                    <a href="#" class="text-custom-red text-sm ml-4 hover:underline">Privacy Policy</a>
+                </div>
+                <button type="submit" class="md:col-span-2 bg-custom-red text-white font-semibold py-3 px-6 rounded-md shadow-lg hover:bg-custom-red-dark transition duration-300 mt-6">Inquire Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer (Copied from previous page) -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+<div>
+                <h4 class="font-bold text-lg mb-4 text-custom-red-light">Products</h4>
+                <ul>
+                    <li class="mb-2"><a href="./products.html" class="text-gray-400 hover:text-white">Categories</a></li>
+                    <li class="mb-2"><a href="./Speciality Plywood.html" class="text-gray-400 hover:text-white">Plywood & Blockboard</a></li>
+                    <li class="mb-2"><a href="./doors.html" class="text-gray-400 hover:text-white">Doors</a></li>
+                    <li class="mb-2"><a href="./Veneer.html" class="text-gray-400 hover:text-white">Veneers</a></li>
+                    <li class="mb-2"><a href="./greeninfinity-mdf.html" class="text-gray-400 hover:text-white">MDF</a></li>
+                    <li class="mb-2"><a href="./Speciality Plywood.html" class="text-gray-400 hover:text-white">Speciality Plywood</a></li>
+                    <li class="mb-2"><a href="./pvc.html" class="text-gray-400 hover:text-white">PVC</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-custom-red-light">Speciality Feature</h4>
+                <ul>
+                    <li class="mb-2"><a href="./waterproof.html" class="text-gray-400 hover:text-white">Water Proof</a></li>
+                    <li class="mb-2"><a href="./Fire Retardant .html" class="text-gray-400 hover:text-white">Fire Retardant</a></li>
+                    <li class="mb-2"><a href="./zero-emission.html" class="text-gray-400 hover:text-white">Zero Emission</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-custom-red-light">Brands</h4>
+                <ul>
+                    <li class="mb-2"><a href="./greeninfinity-mdf.html" class="text-gray-400 hover:text-white">GreenInfinity</a></li>
+                    <li class="mb-2"><a href="./Ecotec.html" class="text-gray-400 hover:text-white">Ecotec</a></li>
+                    <li class="mb-2"><a href="./optim-g.html" class="text-gray-400 hover:text-white">Optima G</a></li>
+                    <li class="mb-2"><a href="./Greenply WPC PVC uPVC.html" class="text-gray-400 hover:text-white">GreenInfinity Ndure</a></li>
+                    <li class="mb-2"><a href="./woodcreest.html" class="text-gray-400 hover:text-white">Wood Crest</a></li>
+                    <li class="mb-2"><a href="./greeninfinity-mdf.html" class="text-gray-400 hover:text-white">GreenInfinity MDF</a></li>
+                    <!-- <li class="mb-2"><a href="." class="text-gray-400 hover:text-white">OPTIMAG</a></li> -->
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-custom-red-light">Furniture Type</h4>
+                <ul>
+                    <li class="mb-2"><a href="./chair.html" class="text-gray-400 hover:text-white">Chair</a></li>
+                    <li class="mb-2"><a href="./Study table.html" class="text-gray-400 hover:text-white">Study Table</a></li>
+                    <li class="mb-2"><a href="./Sofa.html" class="text-gray-400 hover:text-white">Sofa</a></li>
+                    <li class="mb-2"><a href="./bed.html" class="text-gray-400 hover:text-white">Bed</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-lg mb-4 text-custom-red-light">Quick Links & More</h4>
+                <ul>
+                    <li class="mb-2"><a href="./about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+                    <li class="mb-2"><a href="./contact.html" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                    <li class="mb-2"><a href="./investers.html" class="text-gray-400 hover:text-white">Investors</a></li>
+                    <li class="mb-2"><a href="./Sustainable.html" class="text-gray-400 hover:text-white">Sustainability</a></li>
+                    <li class="mb-2"><a href="./blog.html" class="text-gray-400 hover:text-white">Blogs</a></li>
+                    <!-- <li class="mb-2"><a href="./" class="text-gray-400 hover:text-white">FAQ</a></li> -->
+                    <li class="mb-2"><a href="./Privacy Policy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    <li class="mb-2"><a href="./Disclaimer.html" class="text-gray-400 hover:text-white">Disclaimer</a></li>
+                    <!-- <li class="mb-2"><a href="" class="text-gray-400 hover:text-white">HKS Award</a></li> -->
+                </ul>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 border-t border-gray-700 mt-8 pt-8 text-center">
+            <div class="flex justify-center space-x-6 mb-4">
+               <a href="https://www.facebook.com/GreenplyPlywood/" class="social-icon-footer"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/greenplyplywood" class="social-icon-footer"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/greenplyplywood/" class="social-icon-footer"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/channel/UCl3ckO1adsIiPFHsb8Uizvg" class="social-icon-footer"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="text-gray-500 text-sm">Copyright &copy; 2025 GreenInfinity.com. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Get elements
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const enquiryButton = document.getElementById('enquiry-button');
+        const enquiryModalOverlay = document.getElementById('enquiry-modal-overlay');
+        const modalCloseButton = document.getElementById('modal-close-button');
+        const enquiryForm = document.getElementById('enquiry-form');
+        const productCarousel = document.getElementById('product-carousel');
+        const scrollLeftBtn = document.getElementById('scroll-left');
+        const scrollRightBtn = document.getElementById('scroll-right');
+
+
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Show modal when enquiry button is clicked
+        enquiryButton.addEventListener('click', () => {
+            enquiryModalOverlay.classList.add('show');
+        });
+
+        // Hide modal when close button or overlay is clicked
+        modalCloseButton.addEventListener('click', () => {
+            enquiryModalOverlay.classList.remove('show');
+        });
+
+        enquiryModalOverlay.addEventListener('click', (event) => {
+            if (event.target === enquiryModalOverlay) {
+                enquiryModalOverlay.classList.remove('show');
+            }
+        });
+
+        // Handle form submission for WhatsApp (Enquiry Form)
+        enquiryForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById('name').value;
+            const mobile = document.getElementById('mobile').value;
+            const pincode = document.getElementById('pincode').value;
+            const inquiryType = document.getElementById('inquiry-type').value;
+            const robotCheckbox = document.getElementById('robot-checkbox').checked;
+
+            // Basic validation
+            if (!name || !mobile || !pincode || !inquiryType) {
+                alert('Please fill in all required fields.'); // Using alert for simplicity, consider a custom modal for better UX
+                return;
+            }
+
+            if (!robotCheckbox) {
+                alert('Please confirm you are not a robot.'); // Using alert for simplicity
+                return;
+            }
+
+            // Construct WhatsApp message
+            const message = `
+                Enquiry Details:
+                Name: ${name}
+                Mobile: ${mobile}
+                Pincode: ${pincode}
+                Inquiry Type: ${inquiryType}
+            `.trim(); // Trim to remove leading/trailing whitespace
+
+            // Replace with your WhatsApp number (e.g., country code + number)
+            const whatsappNumber = '+919945015544'; // Example: +91 for India
+
+            // Encode the message for URL
+            const encodedMessage = encodeURIComponent(message);
+
+            // Create WhatsApp URL
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            // Open WhatsApp
+            window.open(whatsappUrl, '_blank');
+
+            // Optionally, close the modal after sending
+            enquiryModalOverlay.classList.remove('show');
+
+            // Clear the form
+            enquiryForm.reset();
+        });
+
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const contentId = header.dataset.target;
+                const content = document.getElementById(contentId);
+                const icon = header.querySelector('.accordion-icon');
+
+                // Check if the clicked accordion is already active
+                const isActive = header.classList.contains('active');
+
+                // Close all other open accordions
+                document.querySelectorAll('.accordion-content').forEach(openContent => {
+                    if (openContent.id !== contentId && openContent.style.maxHeight !== '0px') {
+                        openContent.previousElementSibling.classList.remove('active');
+                        openContent.previousElementSibling.querySelector('.accordion-icon').style.transform = 'rotate(0deg)';
+                        openContent.style.maxHeight = '0';
+                        openContent.style.padding = '0 1.5rem';
+                        openContent.style.opacity = '0';
+                        setTimeout(() => {
+                            openContent.style.display = 'none';
+                        }, 300);
+                    }
+                });
+
+                // Toggle current accordion
+                if (isActive) {
+                    header.classList.remove('active');
+                    icon.style.transform = 'rotate(0deg)';
+                    content.style.maxHeight = '0';
+                    content.style.padding = '0 1.5rem';
+                    content.style.opacity = '0';
+                    setTimeout(() => {
+                        content.style.display = 'none';
+                    }, 300);
+                } else {
+                    header.classList.add('active');
+                    content.style.display = 'block'; // Set display: block before applying max-height
+                    content.style.maxHeight = '400px'; // Set fixed max-height
+                    content.style.padding = '1rem 1.5rem'; // Expand padding
+                    content.style.opacity = '1';
+                    icon.style.transform = 'rotate(45deg)';
+                }
+            });
+        });
+
+        // Product Carousel Scroll functionality
+        scrollLeftBtn.addEventListener('click', () => {
+            productCarousel.scrollBy({
+                left: -300, // Scroll left by 300px
+                behavior: 'smooth'
+            });
+        });
+
+        scrollRightBtn.addEventListener('click', () => {
+            productCarousel.scrollBy({
+                left: 300, // Scroll right by 300px
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

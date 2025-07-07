@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Living Room Themes - GreenInfinity</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom CSS Variables for Theme */
+        :root {
+            --primary-red: #EF4444; /* Tailwind red-600 */
+            --light-red: #FEE2E2; /* Tailwind red-100 */
+            --dark-red: #DC2626; /* Tailwind red-700 */
+            --text-gray: #374151; /* Tailwind gray-700 */
+            --light-gray: #F3F4F6; /* Tailwind gray-100 */
+            --white: #FFFFFF;
+            --black: #1F2937; /* Tailwind gray-800 */
+            --dark-bg: #1A202C; /* Changed to a darker gray for footer background */
+            --footer-text: #E2E8F0; /* Lighter text for footer links */
+            --footer-heading: #EF4444; /* Red for footer headings */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: var(--text-gray);
+            background-color: var(--white);
+        }
+
+        /* Custom theme colors for Tailwind-like classes */
+        .text-red-theme {
+            color: var(--primary-red);
+        }
+        .bg-red-theme {
+            background-color: var(--primary-red);
+        }
+        .hover-red-theme:hover {
+            background-color: var(--dark-red);
+        }
+        .focus\:ring-red-theme:focus {
+            --tw-ring-color: rgba(239, 68, 68, 0.5); /* Primary red with opacity */
+        }
+        .focus\:border-red-theme:focus {
+            border-color: var(--primary-red);
+        }
+
+        /* Header Specific Styles */
+        header {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                padding-left: 3rem;
+                padding-right: 3rem;
+            }
+        }
+
+        /* Navigation Menu Toggle for Mobile */
+        #navbar-menu.hidden {
+            display: none;
+        }
+        #navbar-menu.flex-col {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            text-align: center;
+            background-color: var(--white);
+            border-top: 1px solid var(--light-gray);
+            padding-top: 1rem;
+        }
+        #navbar-menu.flex-col .nav-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        #navbar-menu.flex-col .nav-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Floating Inquiry Button */
+        #open-inquiry-modal {
+            position: fixed;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            background-color: #EF4444; /* red-600 */
+            color: white;
+            border-radius: 50%;
+            width: 56px; /* w-14 */
+            height: 56px; /* h-14 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem; /* text-2xl */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+            cursor: pointer;
+            z-index: 999;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            border: none;
+            outline: none;
+        }
+        #open-inquiry-modal:hover {
+            background-color: #DC2626; /* red-700 */
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        /* Inquiry Form Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+        .inquiry-form-modal {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .modal-close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6B7280; /* gray-500 */
+        }
+
+        /* Custom Message Box */
+        .message-box-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            display: none; /* Hidden by default */
+        }
+        .message-box-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        /* Hero Section for Living Room Themes */
+        .living-room-hero {
+            background-image: url('https://placehold.co/1200x400/333333/FFFFFF?text=Living+Room+Hero'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            padding-top: 120px; /* To account for fixed header */
+        }
+        .living-room-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: 1;
+        }
+        .living-room-hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .living-room-hero h1 {
+            font-size: 3.5rem; /* text-6xl */
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .living-room-hero p {
+            font-size: 1.25rem; /* text-xl */
+        }
+        .breadcrumb {
+            position: absolute;
+            top: 100px; /* Adjust based on header height */
+            left: 1.5rem;
+            z-index: 2;
+            color: white;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        .breadcrumb > a:not(:last-child)::after {
+            content: ' > ';
+            margin: 0 0.25rem;
+        }
+
+        /* Theme Cards */
+        .theme-card {
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .theme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+        }
+        .theme-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .theme-card-content {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* Furniture Type Section */
+        .furniture-type-section {
+            background-color: #1F2937; /* gray-800 */
+        }
+        .furniture-carousel-container {
+            display: flex;
+            overflow-x: scroll;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+            padding-bottom: 1rem; /* Space for scrollbar on some browsers */
+            gap: 1.5rem; /* space-x-6 */
+        }
+        .furniture-carousel-container::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari, Opera */
+        }
+        .furniture-carousel-item {
+            flex: 0 0 auto;
+            width: 300px; /* Fixed width for each card */
+            scroll-snap-align: start;
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+        .furniture-carousel-item img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .furniture-carousel-item h3 {
+            padding: 1rem;
+            color: #1F2937; /* gray-800 */
+        }
+        .furniture-carousel-nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            border: none;
+            outline: none;
+        }
+        .furniture-carousel-nav-arrow.left {
+            left: -20px;
+        }
+        .furniture-carousel-nav-arrow.right {
+            right: -20px;
+        }
+        .furniture-carousel-nav-arrow:hover {
+            background-color: #E5E7EB; /* gray-200 */
+        }
+
+        /* GreenSpaces Grid */
+        .greenspaces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; /* space-x-6 and space-y-6 */
+        }
+        .greenspaces-item {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .greenspaces-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+        }
+        .greenspaces-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        /* Footer Links */
+        .footer-link {
+            color: var(--footer-text);
+            transition: color 0.3s ease;
+        }
+        .footer-link:hover {
+            color: var(--white);
+        }
+        .social-icon-footer {
+            color: var(--footer-text);
+            transition: color 0.3s ease;
+        }
+        .social-icon-footer:hover {
+            color: var(--primary-red);
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between sticky top-0 z-50 rounded-b-lg">
+        <div style="height:100px; width: 150px; display: flex;justify-content: center; align-items: center;">
+            <img src="./Green Infinity Logo Final-01.png" alt="GreenInfinity Logo" style="opacity: 2.5;">
+        </div>
+        <!-- Updated Navigation Structure: Single row -->
+        <nav id="navbar-menu" class="hidden md:flex flex-row md:items-center md:space-x-4 w-full md:w-auto">
+            <a href="./index.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Consumer</a>
+            <a href="./investers.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Investors</a>
+            <a href="./about.html" class="text-gray-600 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">About Us</a>
+            <a href="./Inspiration.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Inspiration</a>
+            <a href="./products.html" class="text-gray-700 hover:text-red-600 font-medium transition duration-300 ease-in-out py-1 nav-item">Products</a>
+        </nav>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button id="mobile-menu-toggle" class="text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Floating Inquiry Button (Right-middle) -->
+    <button id="open-inquiry-modal">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
+        <span class="sr-only">Open Inquiry Form</span>
+    </button>
+
+    <!-- Inquiry Form Modal -->
+    <div id="inquiry-modal-overlay" class="modal-overlay">
+        <div class="inquiry-form-modal">
+            <button class="modal-close-button" id="close-inquiry-modal">&times;</button>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">Inquire Now</h3>
+            <form class="flex flex-wrap gap-4">
+                <input type="text" id="inquiry-name" placeholder="Enter Your Name" class="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out shadow-sm">
+                <input type="text" id="inquiry-mobile" placeholder="Enter Your Mobile Number" class="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out shadow-sm">
+                <!-- Added Pincode input field -->
+                <input type="text" id="inquiry-pincode" placeholder="Enter Pincode" class="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out shadow-sm">
+                <select id="inquiry-type" class="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out shadow-sm">
+                    <option value="">Select Inquiry Type</option>
+                    <option value="product">Product Inquiry</option>
+                    <option value="support">Support</option>
+                    <option value="other">Other</option>
+                </select>
+                <!-- Added "I'm not a robot" checkbox and Privacy Policy link -->
+                <div class="w-full flex items-center gap-2 mt-2">
+                    <input type="checkbox" id="robot-check" class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50">
+                    <label for="robot-check" class="text-sm text-gray-700">I'm not a robot</label>
+                    <a href="#" class="text-sm text-green-600 hover:underline ml-4">Privacy Policy</a>
+                </div>
+                <button type="button" id="submit-inquiry-button" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">Inquire Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div id="message-box-overlay" class="message-box-overlay">
+        <div class="message-box-content">
+            <p id="message-box-text" class="text-lg font-semibold text-gray-800 mb-4"></p>
+            <button id="message-box-close" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out">OK</button>
+        </div>
+    </div>
+
+    <!-- Hero Section for Living Room Themes -->
+    <section class="living-room-hero">
+        <div class="breadcrumb">
+            <a href="./index.html">Home</a> > <a href="#">Living Room</a>
+        </div>
+        <div class="living-room-hero-content">
+            <h1>Living Room Themes</h1>
+            <p>Envision the penultimate living space</p>
+        </div>
+    </section>
+
+    <!-- Introduction to Living Room Themes -->
+    <section class="py-16 px-6 md:px-12 bg-white text-center">
+        <div class="max-w-4xl mx-auto">
+            <p class="text-lg text-gray-600 leading-relaxed">
+                The living room is where everything and everyone come together under one roof. It's where you'll be spending most of your time at home and it's also the largest room in the house. With all the space and amenities it holds, the living room must feel spacious and comfortable at all times.
+            </p>
+            <p class="text-lg text-gray-600 leading-relaxed mt-4">
+                Discover gorgeous themes to recreate your perfect living space.
+            </p>
+        </div>
+    </section>
+
+    <!-- Living Room Themes Grid -->
+    <section class="py-16 px-6 md:px-12 bg-gray-100">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="theme-card bg-white">
+                <img src="https://www.greenply.com:5001/image1704534467717-2055.jpg" alt="Opulent Living Room Theme">
+                <div class="theme-card-content">
+                    <h3 class="text-xl font-semibold text-gray-900">Opulent</h3>
+                </div>
+            </div>
+            <div class="theme-card bg-white">
+                <img src="https://www.greenply.com:5001/image1704534502892-2858.jpg" alt="Artistic Den Living Room Theme">
+                <div class="theme-card-content">
+                    <h3 class="text-xl font-semibold text-gray-900">Artistic Den</h3>
+                </div>
+            </div>
+            <div class="theme-card bg-white">
+                <img src="https://www.greenply.com:5001/image1704534429033-1465.jpg" alt="Modern Minimalism Living Room Theme">
+                <div class="theme-card-content">
+                    <h3 class="text-xl font-semibold text-gray-900">Modern Minimalism</h3>
+                </div>
+            </div>
+            <div class="theme-card bg-white">
+                <img src="https://www.greenply.com:5001/image1704534532885-345.jpg" alt="Indian Ethos Living Room Theme">
+                <div class="theme-card-content">
+                    <h3 class="text-xl font-semibold text-gray-900">Indian Ethos</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Furniture Type Section with Carousel -->
+    <section class="py-16 px-6 md:px-12 furniture-type-section">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold mb-8 text-white text-center">Furniture Type</h2>
+            <div class="relative">
+                <div id="furniture-carousel" class="furniture-carousel-container">
+                    <!-- Furniture Card 1 -->
+                    <div class="furniture-carousel-item furniture-card">
+                        <img src="https://craftsmill.in/cdn/shop/files/sofas-accent-chairs-cider-orange-soft-velvet-touch-fabric-emily-flared-arm-2-seater-sofa-60-46567514931491.jpg?v=1725047510" alt="Sofa">
+                        <h3 class="text-xl font-semibold text-white">Sofa</h3>
+                    </div>
+                    <!-- Furniture Card 2 -->
+                    <div class="furniture-carousel-item furniture-card">
+                        <img src="https://media.istockphoto.com/id/1339845062/photo/reading-room-or-library-interior-with-leather-armchair-bookshelf-and-floor-lamp.jpg?s=612x612&w=0&k=20&c=2ghOW2DCvb49Up3D0eFeVzv1kbSMjUq-_psohUYeZB0=" alt="Bookshelf">
+                        <h3 class="text-xl font-semibold text-white">Bookshelf</h3>
+                    </div>
+                    <!-- Furniture Card 3 -->
+                    <div class="furniture-carousel-item furniture-card">
+                        <img src="https://m.media-amazon.com/images/I/81x53kVivOL.jpg" alt="Coffee Table">
+                        <h3 class="text-xl font-semibold text-white">Coffee Table</h3>
+                    </div>
+                    <!-- Furniture Card 4 -->
+                    <div class="furniture-carousel-item furniture-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbaheiG6VWv0w2fRv4Tt0CJX21TfZqWbANzw&s" alt="TV Unit">
+                        <h3 class="text-xl font-semibold text-white">TV Unit</h3>
+                    </div>
+                    <!-- Furniture Card 5 -->
+                    <div class="furniture-carousel-item furniture-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhdhvvZDOBFsh4guaR-FTSFNlJT_e7lNyyog&s" alt="Accent Chair">
+                        <h3 class="text-xl font-semibold text-white">Accent Chair</h3>
+                    </div>
+                    <!-- Furniture Card 6 -->
+                    <div class="furniture-carousel-item furniture-card">
+                        <img src="https://m.media-amazon.com/images/I/71TmPvRg13L.jpg" alt="Sideboard">
+                        <h3 class="text-xl font-semibold text-white">Sideboard</h3>
+                    </div>
+                    <!-- Furniture Card 7 -->
+                    <div class="furniture-carousel-item furniture-card">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYik6fSz8VzWwHoE9GaPWRuffqtKlIztuZncASXkoWOhAEoRnadSDjjiw5_I_Yk0DEg6s&usqp=CAU" alt="Ottoman">
+                        <h3 class="text-xl font-semibold text-white">Ottoman</h3>
+                    </div>
+                </div>
+                <!-- Navigation Arrows -->
+                <button id="furniture-carousel-prev" class="furniture-carousel-nav-arrow left">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="furniture-carousel-next" class="furniture-carousel-nav-arrow right">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore GreenInfinity Products Section -->
+    <section class="py-16 px-6 md:px-12 bg-white">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8">Explore GreenInfinity Products</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1710152637199-717.jpg" alt="Plywood & Blockboard" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">Plywood & Blockboard</h3>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1704350929535-122.jpg" alt="Doors" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">Doors</h3>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1710152649795-2364.jpg" alt="Veneers" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">Veneers</h3>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-4">
+                    <img src="https://www.greenply.com:5001/image1704351029220-2769.jpg" alt="MDF and Board" class="rounded-lg mb-4 w-full h-40 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-900">MDF and Board</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- #GreenSpaces Section -->
+    <section class="py-16 px-6 md:px-12 bg-gray-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">#GreenSpaces</h2>
+                <a href="#" class="text-green-600 hover:underline flex items-center font-semibold">
+                    Discover
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path></svg>
+                </a>
+            </div>
+            <div class="greenspaces-grid">
+                <div class="greenspaces-item">
+                    <img src="https://media.designcafe.com/wp-content/uploads/2020/03/21012613/luxury-living-room-designs.jpg" alt="Living Room GreenSpace 1">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://media.architecturaldigest.com/photos/64efa7a4022e3959b07c3a68/master/w_1600%2Cc_limit/YUXY102_0224%2520(1).jpg" alt="Living Room GreenSpace 2">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXQ-Mh92sf9j5Tx2Wvz4bhpH7yST5pNYBlwQ&s" alt="Living Room GreenSpace 3">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://www.marthastewart.com/thmb/lxfu2-95SWCS0jwciHs1mkbsGUM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/modern-living-rooms-wb-1-bc45b0dc70e541f0ba40364ae6bd8421.jpg" alt="Living Room GreenSpace 4">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ1Uawk4ILDlFALRVYLeNnqZdmzvfb_ZJGew&s" alt="Living Room GreenSpace 5">
+                </div>
+                <div class="greenspaces-item">
+                    <img src="https://cdn.shopify.com/s/files/1/0683/7338/1440/files/Living-and-dining_1_1.jpg?v=1713951337" alt="Living Room GreenSpace 6">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-white py-12 relative">
+        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-5 gap-8">
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Products</h3>
+                <ul class="space-y-2">
+                    <li><a href="./products.html" class="footer-link">Categories</a></li>
+                    <li><a href="./Speciality Plywood.html" class="footer-link">Plywood & Blockboard</a></li>
+                    <li><a href="./doors.html" class="footer-link">Doors</a></li>
+                    <li><a href="./Veneer.html" class="footer-link">Veneers</a></li>
+                    <li><a href="./MDF and Board.html" class="footer-link">MDF</a></li>
+                    <li><a href="./Speciality Plywood.html" class="footer-link">Speciality Plywood</a></li>
+                    <li><a href="./pvc.html" class="footer-link">PVC</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Speciality Feature</h3>
+                <ul class="space-y-2">
+                    <li><a href="./waterproof.html" class="footer-link">Water Proof</a></li>
+                    <li><a href="./Fire Retardant .html" class="footer-link">Fire Retardant</a></li>
+                    <li><a href="./zero-emission.html" class="footer-link">Zero Emission</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Brands</h3>
+                <ul class="space-y-2">
+                    <li><a href="./products.html" class="footer-link">GreenInfinity</a></li>
+                    <li><a href="./Ecotec.html" class="footer-link">Ecotec</a></li>
+                    <li><a href="./optim-g.html" class="footer-link">Optima G</a></li>
+                    <li><a href="./Greenply WPC PVC uPVC.html" class="footer-link">GreenInfinity Ndure</a></li>
+                    <li><a href="./woodcreest.html" class="footer-link">Wood Crrest</a></li>
+                    <li><a href="./greeninfinity-mdf.html" class="footer-link">GreenInfinity MDF</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Furniture Type</h3>
+                <ul class="space-y-2">
+                    <li><a href="./chair.html" class="footer-link">Chair</a></li>
+                    <li><a href="./Study table.html" class="footer-link">Study Table</a></li>
+                    <li><a href="./Sofa.html" class="footer-link">Sofa</a></li>
+                    <li><a href="./bed.html" class="footer-link">Bed</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-semibold mb-4 text-red-theme">Quick Links & More</h3>
+                <ul class="space-y-2">
+                    <li><a href="./about.html" class="footer-link">About Us</a></li>
+                    <li><a href="./contact.html" class="footer-link">Contact Us</a></li>
+                    <li><a href="./investers.html" class="footer-link">Investors</a></li>
+                    <li><a href="./Sustainable.html" class="footer-link">Sustainability</a></li>
+                    <li><a href="./blog.html" class="footer-link">Blogs</a></li>
+                    <li><a href="./Privacy Policy.html" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="./Disclaimer.html" class="footer-link">Disclaimer</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 mt-12 border-t border-gray-700 pt-8 flex flex-col items-center">
+            <p class="text-lg font-semibold mb-4">Follow us on</p>
+            <div class="flex space-x-4 text-2xl mb-8">
+                <a href="https://www.facebook.com/GreenplyPlywood/" class="social-icon-footer"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/greenplyplywood" class="social-icon-footer"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/greenplyplywood/" class="social-icon-footer"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/channel/UCl3ckO1adsIiPFHsb8Uizvg" class="social-icon-footer"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="text-center text-sm text-gray-400">Copyright &copy; 2025 GreenInfinity.com. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navbarMenu = document.getElementById('navbar-menu');
+
+            // Function to ensure correct menu state on resize/load
+            const ensureMenuState = () => {
+                if (window.innerWidth >= 768) { // Desktop view (md breakpoint)
+                    // On desktop, ensure the menu is visible and in row layout
+                    navbarMenu.classList.remove('hidden', 'flex-col', 'space-y-4', 'p-4', 'bg-white', 'w-full', 'items-center');
+                    // Explicitly set display to flex to override any potential 'hidden' or conflicting styles
+                    navbarMenu.style.display = 'flex';
+                } else { // Mobile view
+                    // If the menu is currently visible (i.e., 'hidden' is not present), apply mobile-specific styles
+                    if (!navbarMenu.classList.contains('hidden')) {
+                         navbarMenu.classList.add('flex-col', 'space-y-4', 'p-4', 'bg-white', 'w-full', 'items-center');
+                         navbarMenu.style.display = 'flex'; // Ensure it's flex for mobile expanded state
+                    } else {
+                         navbarMenu.style.display = 'none'; // Ensure it's hidden for mobile collapsed state
+                    }
+                }
+            };
+
+            if (mobileMenuToggle && navbarMenu) {
+                // Initial state check on DOMContentLoaded
+                ensureMenuState();
+
+                // Event listener for mobile menu button
+                mobileMenuToggle.addEventListener('click', () => {
+                    navbarMenu.classList.toggle('hidden');
+                    navbarMenu.classList.toggle('flex-col');
+                    navbarMenu.classList.toggle('space-y-4');
+                    navbarMenu.classList.toggle('p-4');
+                    navbarMenu.classList.toggle('bg-white');
+                    navbarMenu.classList.toggle('w-full');
+                    navbarMenu.classList.toggle('items-center');
+                    // Re-evaluate display after toggle for immediate visual update
+                    ensureMenuState();
+                });
+
+                // Add a resize listener to ensure correct display on desktop
+                window.addEventListener('resize', ensureMenuState);
+            }
+
+            // Inquiry Form (Floating Button and Modal) Logic
+            const inquiryModalOverlay = document.getElementById('inquiry-modal-overlay');
+            const openInquiryModalButton = document.getElementById('open-inquiry-modal');
+            const closeInquiryModalButton = document.getElementById('close-inquiry-modal');
+            const submitInquiryButton = document.getElementById('submit-inquiry-button');
+            const messageBoxOverlay = document.getElementById('message-box-overlay');
+            const messageBoxText = document.getElementById('message-box-text');
+            const messageBoxCloseButton = document.getElementById('message-box-close');
+
+            if (openInquiryModalButton) {
+                openInquiryModalButton.addEventListener('click', () => {
+                    inquiryModalOverlay.style.display = 'flex'; // Use flex to center content
+                });
+            }
+
+            if (closeInquiryModalButton) {
+                closeInquiryModalButton.addEventListener('click', () => {
+                    inquiryModalOverlay.style.display = 'none';
+                });
+            }
+
+            if (submitInquiryButton) {
+                submitInquiryButton.addEventListener('click', () => {
+                    const name = document.getElementById('inquiry-name').value;
+                    const mobile = document.getElementById('inquiry-mobile').value;
+                    const pincode = document.getElementById('inquiry-pincode').value;
+                    const inquiryType = document.getElementById('inquiry-type').value;
+                    const robotCheck = document.getElementById('robot-check').checked;
+
+                    if (!name || !mobile || !pincode || !inquiryType) {
+                        showMessageBox('Please fill in all required fields.');
+                        return;
+                    }
+                    if (!robotCheck) {
+                        showMessageBox('Please confirm you are not a robot.');
+                        return;
+                    }
+
+                    const message = `Hello GreenInfinity, I would like to inquire about your products.
+Name: ${name}
+Contact No.: ${mobile}
+Pincode: ${pincode}
+Inquiry Type: ${inquiryType}`;
+
+                    // Replace '91XXXXXXXXXX' with the actual WhatsApp number for inquiries
+                    const whatsappUrl = `https://wa.me/+91XXXXXXXXXX?text=${encodeURIComponent(message)}`;
+
+                    window.open(whatsappUrl, '_blank');
+                    inquiryModalOverlay.style.display = 'none'; // Close modal after submission
+                    showMessageBox('Your inquiry has been sent!');
+                });
+            }
+
+            function showMessageBox(message) {
+                messageBoxText.textContent = message;
+                messageBoxOverlay.style.display = 'flex';
+            }
+
+            if (messageBoxCloseButton) {
+                messageBoxCloseButton.addEventListener('click', () => {
+                    messageBoxOverlay.style.display = 'none';
+                });
+            }
+
+            // Close inquiry modal if user clicks outside of it
+            window.addEventListener('click', (event) => {
+                if (event.target == inquiryModalOverlay) {
+                    inquiryModalOverlay.style.display = 'none';
+                }
+                if (event.target == messageBoxOverlay) {
+                    messageBoxOverlay.style.display = 'none';
+                }
+            });
+
+            // Furniture Carousel Logic
+            const furnitureCarousel = document.getElementById('furniture-carousel');
+            const furniturePrevButton = document.getElementById('furniture-carousel-prev');
+            const furnitureNextButton = document.getElementById('furniture-carousel-next');
+
+            if (furniturePrevButton && furnitureCarousel) {
+                furniturePrevButton.addEventListener('click', () => {
+                    // Scroll left by the width of one item + gap
+                    const itemWidth = furnitureCarousel.querySelector('.furniture-carousel-item').offsetWidth;
+                    const gap = 24; // 1.5rem = 24px
+                    furnitureCarousel.scrollBy({
+                        left: -(itemWidth + gap),
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            if (furnitureNextButton && furnitureCarousel) {
+                furnitureNextButton.addEventListener('click', () => {
+                    // Scroll right by the width of one item + gap
+                    const itemWidth = furnitureCarousel.querySelector('.furniture-carousel-item').offsetWidth;
+                    const gap = 24; // 1.5rem = 24px
+                    furnitureCarousel.scrollBy({
+                        left: (itemWidth + gap),
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
